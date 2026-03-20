@@ -7,29 +7,35 @@ interface Props {
   accent?: "green" | "red" | "yellow" | "blue" | "purple";
 }
 
-const TREND_COLORS = {
-  up:      "text-green-700",
-  down:    "text-red-600",
-  neutral: "text-gray-400",
-};
-
-const TREND_ICONS = { up: "↑", down: "↓", neutral: "→" };
-
 export default function MetricCard({ label, value, sub, trend, trendLabel, accent }: Props) {
   const valueColor =
-    accent === "red"    ? "text-red-600"   :
-    accent === "green"  ? "text-green-700" :
-    accent === "yellow" ? "text-yellow-600":
-    "text-gray-900";
+    accent === "red"    ? "#dc2626" :
+    accent === "green"  ? "#15803d" :
+    accent === "yellow" ? "#ca8a04" :
+    "#111827";
+
+  const trendColor =
+    trend === "up"   ? "#15803d" :
+    trend === "down" ? "#dc2626" :
+    "#9ca3af";
 
   return (
-    <div className="bg-white border border-gray-200 rounded p-4">
-      <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">{label}</p>
-      <p className={`mt-1 text-xl font-semibold tabular-nums ${valueColor}`}>{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-gray-400">{sub}</p>}
+    <div style={{
+      background: "#ffffff",
+      border: "1px solid #e5e7eb",
+      borderRadius: 6,
+      padding: "14px 16px",
+    }}>
+      <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0, fontWeight: 500 }}>
+        {label}
+      </p>
+      <p style={{ fontSize: 22, fontWeight: 600, color: valueColor, margin: "4px 0 0", fontVariantNumeric: "tabular-nums" }}>
+        {value}
+      </p>
+      {sub && <p style={{ fontSize: 11, color: "#9ca3af", margin: "2px 0 0" }}>{sub}</p>}
       {trend && trendLabel && (
-        <p className={`mt-1.5 text-xs font-medium ${TREND_COLORS[trend]}`}>
-          {TREND_ICONS[trend]} {trendLabel}
+        <p style={{ fontSize: 11, color: trendColor, margin: "6px 0 0", fontWeight: 500 }}>
+          {trend === "up" ? "↑" : trend === "down" ? "↓" : "→"} {trendLabel}
         </p>
       )}
     </div>

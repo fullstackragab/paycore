@@ -39,6 +39,7 @@ import {
 } from "@/lib/data/formatters";
 import { RiskEvent, FraudCase, RiskRule } from "@/types/payments";
 import MetricCard from "@/components/ui/MetricCard";
+import PageShell from "@/components/shared/PageShell";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -109,13 +110,34 @@ function riskBg(score: number): string {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function DecisionBadge({ decision }: { decision: string }) {
+  const colorMap: Record<string, string> = {
+    approve: "#15803d",
+    decline: "#dc2626",
+    review: "#ca8a04",
+    challenge_3ds: "#2563eb",
+  };
+  const color = colorMap[decision] ?? "#6b7280";
   return (
     <span
-      className={clsx(
-        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
-        DECISION_COLORS[decision] ?? "bg-slate-100 text-slate-600",
-      )}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        fontSize: 12,
+        fontWeight: 500,
+        color,
+      }}
     >
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          background: color,
+          flexShrink: 0,
+          opacity: 0.6,
+        }}
+      />
       {DECISION_LABEL[decision] ?? decision}
     </span>
   );
@@ -249,7 +271,7 @@ function OverviewTab({ events }: { events: RiskEvent[] }) {
               <Tooltip formatter={(v) => [`${Number(v)}%`, "Share"]} />
               <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                 {decisionData.map((d, i) => (
-                  <Cell key={i} fill={d.fill} />
+                  <Cell key={i} fill="#374151" />
                 ))}
               </Bar>
             </BarChart>
@@ -268,7 +290,7 @@ function OverviewTab({ events }: { events: RiskEvent[] }) {
               <Tooltip />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {scoreDistribution.map((_, i) => (
-                  <Cell key={i} fill={scoreColors[i]} />
+                  <Cell key={i} fill="#374151" />
                 ))}
               </Bar>
             </BarChart>
@@ -482,10 +504,10 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                   label: "Mismatch",
                   value: selected.countryMismatch ? "Yes" : "No",
                 },
-              ].map(({ label, value }) => (
-                <div key={label} className="rounded-lg bg-white p-2">
-                  <p className="text-[10px] text-gray-400">{label}</p>
-                  <p className="text-xs font-semibold text-gray-900">{value}</p>
+              ].map(([k, v]) => (
+                <div key={k} className="rounded-lg bg-white p-2">
+                  <p className="text-[10px] text-slate-400">{k}</p>
+                  <p className="text-xs font-semibold text-slate-900">{v}</p>
                 </div>
               ))}
             </div>
@@ -1127,64 +1149,22 @@ export default function RiskPage() {
   }, [refresh]);
 
   return (
-    <div className="px-8 py-8 max-w-7xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <ShieldAlert className="h-5 w-5 text-amber-500" />
-            <h1 className="text-xl font-semibold text-slate-900">
-              Risk & Fraud
-            </h1>
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-            </span>
-          </div>
-          <p className="text-xs text-slate-400">
-            Risk scoring · Velocity controls · Device fingerprinting · Manual
-            review · Fraud cases · Rule engine
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-slate-400">
-            Updated {lastRefresh.toLocaleTimeString()}
-          </span>
-          <button
-            onClick={refresh}
-            disabled={refreshing}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm disabled:opacity-50"
-          >
-            <RefreshCw
-              className={clsx("h-3.5 w-3.5", refreshing && "animate-spin")}
-            />
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      <div className="flex gap-1 mb-6 border-b border-slate-200">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={clsx(
-              "px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === t
-                ? "border-gray-200 text-amber-600"
-                : "border-transparent text-slate-500 hover:text-slate-700",
-            )}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
+    <PageShell
+      title="Risk & Fraud"
+      subtitle="Risk scoring · Velocity controls · Device fingerprinting · Manual review · Rule engine"
+      lastRefresh={lastRefresh}
+      refreshing={refreshing}
+      onRefresh={refresh}
+      tabs={TABS}
+      activeTab={tab}
+      onTabChange={(t) => setTab(t as Tab)}
+    >
       {tab === "Overview" && <OverviewTab events={events} />}
       {tab === "Live feed" && <LiveFeedTab events={events} />}
       {tab === "Review queue" && <ReviewQueueTab events={events} />}
       {tab === "Fraud cases" && <FraudCasesTab cases={cases} />}
       {tab === "Rules" && <RulesTab rules={rules} />}
       {tab === "Concepts" && <ConceptsTab />}
-    </div>
+    </PageShell>
   );
 }

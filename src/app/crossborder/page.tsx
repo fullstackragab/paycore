@@ -38,6 +38,7 @@ import {
 } from "@/lib/data/formatters";
 import { CrossBorderPayment, FXRate } from "@/types/payments";
 import MetricCard from "@/components/ui/MetricCard";
+import PageShell from "@/components/shared/PageShell";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -50,16 +51,7 @@ const TABS = [
 ] as const;
 type Tab = (typeof TABS)[number];
 
-const CORRIDOR_COLORS = [
-  "#3b82f6",
-  "#8b5cf6",
-  "#10b981",
-  "#f59e0b",
-  "#ef4444",
-  "#6366f1",
-  "#ec4899",
-  "#14b8a6",
-];
+// colors removed — monochrome charts
 
 // ─── SWIFT lifecycle stages ───────────────────────────────────────────────────
 
@@ -182,8 +174,18 @@ const SWIFT_STAGES = [
 // ─── Helper components ────────────────────────────────────────────────────────
 
 function XBStatusPill({ status }: { status: string }) {
-  const colors =
-    XB_STATUS_COLORS[status] ?? "bg-slate-100 text-slate-600 border-slate-200";
+  const colorMap: Record<string, string> = {
+    initiated: "#6b7280",
+    compliance_check: "#ca8a04",
+    fx_converted: "#2563eb",
+    swift_sent: "#374151",
+    intermediary_processing: "#374151",
+    credited: "#15803d",
+    failed: "#dc2626",
+    returned: "#ea580c",
+    sanctions_hold: "#b91c1c",
+  };
+  const color = colorMap[status] ?? "#6b7280";
   const isLive = [
     "compliance_check",
     "fx_converted",
@@ -192,17 +194,26 @@ function XBStatusPill({ status }: { status: string }) {
   ].includes(status);
   return (
     <span
-      className={clsx(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium",
-        colors,
-      )}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        fontSize: 12,
+        fontWeight: 500,
+        color,
+      }}
     >
-      {isLive && (
-        <span className="relative flex h-1.5 w-1.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current" />
-          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current" />
-        </span>
-      )}
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          background: color,
+          flexShrink: 0,
+          opacity: isLive ? 1 : 0.5,
+          animation: isLive ? "pulse 2s ease-in-out infinite" : "none",
+        }}
+      />
       {XB_STATUS_LABEL[status] ?? status}
     </span>
   );
@@ -230,8 +241,14 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
   ).map(([name, value]) => ({ name: XB_STATUS_LABEL[name] ?? name, value }));
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4,1fr)",
+          gap: 12,
+        }}
+      >
         <MetricCard
           label="Total volume"
           value={formatCentsCompact(metrics.totalVolume)}
@@ -260,11 +277,25 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-900 mb-4">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #e5e7eb",
+            borderRadius: 8,
+            padding: 16,
+          }}
+        >
+          <p
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#111827",
+              margin: "0 0 14px",
+            }}
+          >
             Volume by corridor
-          </h3>
+          </p>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={corridorData} layout="vertical">
               <CartesianGrid
@@ -284,24 +315,35 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
                 width={70}
               />
               <Tooltip
-                formatter={(v) => [`$${Number(v).toLocaleString()}`, "Volume"]}
-              />{" "}
+                formatter={(v: number) => [`$${v.toLocaleString()}`, "Volume"]}
+              />
               <Bar dataKey="volume" radius={[0, 4, 4, 0]}>
                 {corridorData.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={CORRIDOR_COLORS[i % CORRIDOR_COLORS.length]}
-                  />
+                  <Cell key={i} fill="#374151" />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-900 mb-4">
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #e5e7eb",
+            borderRadius: 8,
+            padding: 16,
+          }}
+        >
+          <p
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#111827",
+              margin: "0 0 14px",
+            }}
+          >
             Payments by status
-          </h3>
+          </p>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={statusData} layout="vertical">
               <CartesianGrid
@@ -324,11 +366,32 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
       </div>
 
       {/* Fee breakdown */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-slate-900 mb-4">
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #e5e7eb",
+          borderRadius: 8,
+          padding: 20,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#111827",
+            margin: "0 0 14px",
+          }}
+        >
           Cost anatomy of a cross-border payment
-        </h3>
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3,1fr)",
+            gap: 12,
+            marginBottom: 14,
+          }}
+        >
           {[
             {
               label: "FX spread fees",
@@ -353,7 +416,12 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
           ].map((f) => (
             <div
               key={f.label}
-              className={`rounded-xl border border-slate-200 bg-white p-4 shadow-sm border-l-4 ${f.color}`}
+              style={{
+                background: "#fff",
+                border: "1px solid #e5e7eb",
+                borderRadius: 8,
+                padding: 16,
+              }}
             >
               <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
                 {f.label}
@@ -391,12 +459,16 @@ function PaymentsTab({ payments }: { payments: CrossBorderPayment[] }) {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={clsx(
-                "rounded-full px-3 py-1 text-xs font-medium border transition-colors",
+              className={`filter-btn ${f === f ? "" : ""}`}
+              style={
                 filter === f
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-400",
-              )}
+                  ? {
+                      background: "#111827",
+                      color: "#fff",
+                      borderColor: "#111827",
+                    }
+                  : {}
+              }
             >
               {f === "all" ? "All" : f === "holds" ? "⚠ Sanctions holds" : f}
             </button>
@@ -1073,13 +1145,13 @@ function SWIFTLifecycleTab() {
               >
                 <path
                   d="M2 10 L18 10"
-                  stroke="#cbd5e1"
+                  stroke="#374151"
                   strokeWidth="1.5"
                   fill="none"
                 />
                 <path
                   d="M13 6 L18 10 L13 14"
-                  stroke="#cbd5e1"
+                  stroke="#374151"
                   strokeWidth="1.5"
                   fill="none"
                   strokeLinecap="round"
@@ -1164,63 +1236,21 @@ export default function CrossBorderPage() {
   }, [refresh]);
 
   return (
-    <div className="px-8 py-8 max-w-7xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Globe className="h-5 w-5 text-orange-500" />
-            <h1 className="text-xl font-semibold text-slate-900">
-              Cross-Border Payments
-            </h1>
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-            </span>
-          </div>
-          <p className="text-xs text-slate-400">
-            SWIFT · MT103 · Correspondent banking · FX conversion · Sanctions
-            screening · Nostro/Vostro
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-slate-400">
-            Updated {lastRefresh.toLocaleTimeString()}
-          </span>
-          <button
-            onClick={refresh}
-            disabled={refreshing}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm disabled:opacity-50"
-          >
-            <RefreshCw
-              className={clsx("h-3.5 w-3.5", refreshing && "animate-spin")}
-            />
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      <div className="flex gap-1 mb-6 border-b border-slate-200">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={clsx(
-              "px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === t
-                ? "border-gray-200 text-orange-600"
-                : "border-transparent text-slate-500 hover:text-slate-700",
-            )}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
+    <PageShell
+      title="Cross-Border Payments"
+      subtitle="SWIFT · MT103 · Correspondent banking · FX conversion · Sanctions screening"
+      lastRefresh={lastRefresh}
+      refreshing={refreshing}
+      onRefresh={refresh}
+      tabs={TABS}
+      activeTab={tab}
+      onTabChange={(t) => setTab(t as Tab)}
+    >
       {tab === "Overview" && <OverviewTab payments={payments} />}
       {tab === "Payments" && <PaymentsTab payments={payments} />}
       {tab === "FX Rates" && <FXRatesTab rates={fxRates} />}
       {tab === "SWIFT" && <SWIFTTab />}
       {tab === "Compliance" && <ComplianceTab payments={payments} />}
-    </div>
+    </PageShell>
   );
 }

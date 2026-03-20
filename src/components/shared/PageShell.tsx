@@ -1,7 +1,7 @@
 "use client";
 
 import { RefreshCw } from "lucide-react";
-import clsx from "clsx";
+import TimeDisplay from "@/components/ui/TimeDisplay";
 
 interface Props {
   title: string;
@@ -16,34 +16,108 @@ interface Props {
 }
 
 export default function PageShell({
-  title, subtitle, lastRefresh, refreshing, onRefresh,
-  tabs, activeTab, onTabChange, children,
+  title,
+  subtitle,
+  lastRefresh,
+  refreshing,
+  onRefresh,
+  tabs,
+  activeTab,
+  onTabChange,
+  children,
 }: Props) {
   return (
-    <div className="px-8 py-8 max-w-7xl">
-      <div className="flex items-center justify-between mb-5">
+    <div style={{ maxWidth: 1200 }}>
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          marginBottom: 24,
+          gap: 16,
+        }}
+      >
         <div>
-          <h1 className="text-base font-semibold text-gray-900">{title}</h1>
-          <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>
+          <h1
+            style={{
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#111827",
+              margin: 0,
+            }}
+          >
+            {title}
+          </h1>
+          <p style={{ fontSize: 11, color: "#9ca3af", margin: "4px 0 0" }}>
+            {subtitle}
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-400">{lastRefresh.toLocaleTimeString()}</span>
-          <button onClick={onRefresh} disabled={refreshing}
-            className="flex items-center gap-1.5 bg-white border border-gray-200 rounded px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-50">
-            <RefreshCw className={clsx("h-3 w-3", refreshing && "animate-spin")} /> Refresh
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            flexShrink: 0,
+          }}
+        >
+          <TimeDisplay date={lastRefresh} />{" "}
+          <button
+            onClick={onRefresh}
+            disabled={refreshing}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              background: "#fff",
+              border: "1px solid #e5e7eb",
+              borderRadius: 5,
+              padding: "5px 12px",
+              fontSize: 11,
+              color: "#6b7280",
+              cursor: "pointer",
+              opacity: refreshing ? 0.5 : 1,
+            }}
+          >
+            <RefreshCw size={11} className={refreshing ? "animate-spin" : ""} />
+            Refresh
           </button>
         </div>
       </div>
-      <div className="flex gap-0 mb-5 border-b border-gray-200">
+
+      {/* Tabs */}
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #e5e7eb",
+          marginBottom: 24,
+          gap: 0,
+        }}
+      >
         {tabs.map((t) => (
-          <button key={t} onClick={() => onTabChange(t)}
-            className={clsx("px-4 py-2 text-xs font-medium border-b-2 -mb-px transition-colors",
-              activeTab === t ? "border-gray-900 text-gray-900" : "border-transparent text-gray-400 hover:text-gray-600"
-            )}>
+          <button
+            key={t}
+            onClick={() => onTabChange(t)}
+            style={{
+              padding: "8px 16px",
+              fontSize: 12,
+              fontWeight: 500,
+              border: "none",
+              borderBottom:
+                activeTab === t ? "2px solid #111827" : "2px solid transparent",
+              background: "none",
+              color: activeTab === t ? "#111827" : "#9ca3af",
+              cursor: "pointer",
+              marginBottom: -1,
+              transition: "color 0.1s",
+              whiteSpace: "nowrap",
+            }}
+          >
             {t}
           </button>
         ))}
       </div>
+
       {children}
     </div>
   );

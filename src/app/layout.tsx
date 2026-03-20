@@ -14,9 +14,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Sidebar />
-        <main className="ml-52 min-h-screen">
+        {/* 220px = sidebar width. Responsive: on small screens sidebar collapses but we keep simple for now */}
+        <main style={{
+          marginLeft: 220,
+          minHeight: "100vh",
+          padding: "36px 40px",
+          maxWidth: "calc(100vw - 220px)",
+          overflowX: "hidden",
+        }}>
           {children}
         </main>
       </body>
