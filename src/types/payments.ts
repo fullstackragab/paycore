@@ -35,30 +35,30 @@ export type CardNetwork = "visa" | "mastercard" | "amex" | "discover";
 
 export interface CardTransaction {
   id: string;
-  createdAt: string; // ISO timestamp
+  createdAt: string;                  // ISO timestamp
   updatedAt: string;
 
   // Parties
   merchantName: string;
-  merchantCategory: string; // MCC description
+  merchantCategory: string;           // MCC description
   merchantCountry: string;
   cardNetwork: CardNetwork;
   issuingBank: string;
   acquiringBank: string;
 
   // Amounts
-  amount: number; // in cents
+  amount: number;                     // in cents
   currency: string;
-  interchangeFee: number; // in cents
-  schemeFee: number; // in cents
-  processingFee: number; // in cents
-  netSettlement: number; // in cents = amount - all fees
+  interchangeFee: number;             // in cents
+  schemeFee: number;                  // in cents
+  processingFee: number;              // in cents
+  netSettlement: number;              // in cents = amount - all fees
 
   // State
   status: CardTransactionStatus;
   declineReason?: DeclineReason;
-  authCode?: string; // 6-char approval code
-  rrn?: string; // Retrieval Reference Number
+  authCode?: string;                  // 6-char approval code
+  rrn?: string;                       // Retrieval Reference Number
 
   // Flags
   isCardPresent: boolean;
@@ -95,9 +95,9 @@ export interface Chargeback {
   createdAt: string;
   status: ChargebackStatus;
   reason: ChargebackReason;
-  amount: number; // in cents
+  amount: number;                     // in cents
   currency: string;
-  deadlineAt: string; // respond-by date
+  deadlineAt: string;                 // respond-by date
   evidenceSubmittedAt?: string;
   resolvedAt?: string;
 }
@@ -108,12 +108,12 @@ export type SettlementStatus = "pending" | "processing" | "complete" | "failed";
 
 export interface SettlementBatch {
   id: string;
-  date: string; // YYYY-MM-DD
+  date: string;                       // YYYY-MM-DD
   status: SettlementStatus;
   transactionCount: number;
-  grossAmount: number; // in cents
-  totalFees: number; // in cents
-  netAmount: number; // in cents
+  grossAmount: number;                // in cents
+  totalFees: number;                  // in cents
+  netAmount: number;                  // in cents
   processor: string;
   settledAt?: string;
 }
@@ -122,21 +122,117 @@ export interface SettlementBatch {
 
 export interface SimulationConfig {
   transactionsPerMinute: number;
-  declineRate: number; // 0–1
-  chargebackRate: number; // 0–1
-  internationalRate: number; // 0–1
-  avgTransactionAmount: number; // in cents
+  declineRate: number;                // 0–1
+  chargebackRate: number;             // 0–1
+  internationalRate: number;          // 0–1
+  avgTransactionAmount: number;       // in cents
 }
 
 // ─── Dashboard metrics ────────────────────────────────────────────────────────
 
 export interface CardMetrics {
-  totalVolume: number; // in cents
+  totalVolume: number;                // in cents
   totalCount: number;
-  approvalRate: number; // 0–1
-  avgTicket: number; // in cents
-  chargebackRate: number; // 0–1
-  totalFees: number; // in cents
-  netRevenue: number; // in cents
-  pendingSettlement: number; // in cents
+  approvalRate: number;               // 0–1
+  avgTicket: number;                  // in cents
+  chargebackRate: number;             // 0–1
+  totalFees: number;                  // in cents
+  netRevenue: number;                 // in cents
+  pendingSettlement: number;          // in cents
+}
+
+// ─── Bank transfer types ──────────────────────────────────────────────────────
+
+export type BankTransferType =
+  | "ach_credit"
+  | "ach_debit"
+  | "wire"
+  | "rtp"         // Real-Time Payments (The Clearing House)
+  | "sepa_credit"
+  | "sepa_debit";
+
+export type BankTransferStatus =
+  | "initiated"
+  | "submitted"
+  | "pending_settlement"
+  | "settled"
+  | "returned"
+  | "failed"
+  | "cancelled";
+
+export type ACHReturnCode =
+  | "R01" // Insufficient funds
+  | "R02" // Account closed
+  | "R03" // No account / unable to locate
+  | "R04" // Invalid account number
+  | "R05" // Unauthorized debit
+  | "R07" // Authorization revoked
+  | "R08" // Payment stopped
+  | "R10" // Customer advises not authorized
+  | "R16" // Account frozen
+  | "R29" // Corporate customer advises not authorized
+  | "R61" // Misrouted return;
+
+export interface BankTransfer {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+
+  // Parties
+  senderName: string;
+  senderBank: string;
+  senderAccountLast4: string;
+  receiverName: string;
+  receiverBank: string;
+  receiverAccountLast4: string;
+
+  // Transfer details
+  type: BankTransferType;
+  amount: number;           // in cents
+  currency: string;
+  description: string;
+  companyEntryDescription?: string; // ACH batch header field
+
+  // State
+  status: BankTransferStatus;
+  returnCode?: ACHReturnCode;
+  returnDescription?: string;
+  traceNumber?: string;     // ACH trace number
+
+  // Timing
+  effectiveDate: string;    // YYYY-MM-DD
+  submittedAt?: string;
+  settledAt?: string;
+  returnedAt?: string;
+
+  // Flags
+  isSameDayACH: boolean;
+  isInternational: boolean;
+  prenoteRequired: boolean;
+  prenoteVerifiedAt?: string;
+}
+
+export interface ACHBatch {
+  id: string;
+  createdAt: string;
+  companyName: string;
+  entryDescription: string
+  effectiveDate: string;
+  transferCount: number;
+  totalDebit: number;       // in cents
+  totalCredit: number;      // in cents
+  status: "created" | "submitted" | "processing" | "settled" | "returned";
+  returnCount: number;
+  returnRate: number;       // 0-1
+}
+
+export interface BankMetrics {
+  totalVolume: number;
+  totalCount: number;
+  settledCount: number;
+  returnRate: number;
+  avgSettlementHours: number;
+  pendingVolume: number;
+  returnedVolume: number;
+  sameDayCount: number;
 }

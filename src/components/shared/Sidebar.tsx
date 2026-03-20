@@ -32,7 +32,7 @@ const NAV = [
     label: "Bank Transfers",
     href: "/bank",
     icon: Building2,
-    live: false,
+    live: true,
     phase: 2,
   },
   {

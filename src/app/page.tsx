@@ -33,7 +33,7 @@ const DOMAINS = [
     label:   "Bank Transfers",
     desc:    "ACH credits and debits, returns, real-time rails, cut-off windows.",
     href:    "/bank",
-    live:    false,
+    live: true,
     accent:  "bg-teal-500",
   },
   {

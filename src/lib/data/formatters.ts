@@ -102,3 +102,34 @@ export const NETWORK_LABEL: Record<string, string> = {
   amex:       "Amex",
   discover:   "Discover",
 };
+
+// ─── Bank transfer labels ─────────────────────────────────────────────────────
+
+export const BANK_STATUS_LABEL: Record<string, string> = {
+  initiated:          "Initiated",
+  submitted:          "Submitted",
+  pending_settlement: "Pending Settlement",
+  settled:            "Settled",
+  returned:           "Returned",
+  failed:             "Failed",
+  cancelled:          "Cancelled",
+};
+
+export const BANK_TYPE_LABEL: Record<string, string> = {
+  ach_credit:  "ACH Credit",
+  ach_debit:   "ACH Debit",
+  wire:        "Wire Transfer",
+  rtp:         "Real-Time Payment",
+  sepa_credit: "SEPA Credit",
+  sepa_debit:  "SEPA Debit",
+};
+
+export const BANK_STATUS_COLORS: Record<string, string> = {
+  initiated:          "bg-slate-100 text-slate-700 border-slate-200",
+  submitted:          "bg-blue-100 text-blue-800 border-blue-200",
+  pending_settlement: "bg-yellow-100 text-yellow-800 border-yellow-200",
+  settled:            "bg-green-100 text-green-800 border-green-200",
+  returned:           "bg-red-100 text-red-800 border-red-200",
+  failed:             "bg-red-100 text-red-800 border-red-200",
+  cancelled:          "bg-slate-100 text-slate-500 border-slate-200",
+};
