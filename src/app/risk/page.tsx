@@ -504,10 +504,24 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                   label: "Mismatch",
                   value: selected.countryMismatch ? "Yes" : "No",
                 },
-              ].map(([k, v]) => (
-                <div key={k} className="rounded-lg bg-white p-2">
-                  <p className="text-[10px] text-slate-400">{k}</p>
-                  <p className="text-xs font-semibold text-slate-900">{v}</p>
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  style={{ background: "#fff", borderRadius: 4, padding: 8 }}
+                >
+                  <p style={{ fontSize: 10, color: "#9ca3af", margin: 0 }}>
+                    {label}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: "#111827",
+                      margin: "2px 0 0",
+                    }}
+                  >
+                    {value}
+                  </p>
                 </div>
               ))}
             </div>
