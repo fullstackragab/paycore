@@ -315,7 +315,7 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
                 width={70}
               />
               <Tooltip
-                formatter={(v: number) => [`$${v.toLocaleString()}`, "Volume"]}
+                formatter={(v) => [`$${Number(v).toLocaleString()}`, "Volume"]}
               />
               <Bar dataKey="volume" radius={[0, 4, 4, 0]}>
                 {corridorData.map((_, i) => (
