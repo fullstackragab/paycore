@@ -35,37 +35,37 @@ const PARTIES: Party[] = [
   {
     id: "cardholder",
     label: "Cardholder",
-    color: "bg-slate-100 text-slate-700 border-slate-300",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "The customer initiating the payment using their card or digital wallet.",
   },
   {
     id: "merchant",
     label: "Merchant",
-    color: "bg-blue-50 text-blue-700 border-blue-200",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "The business accepting the payment. Receives net settlement after fees.",
   },
   {
     id: "gateway",
     label: "Payment Gateway",
-    color: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "Encrypts and routes the transaction data from merchant to processor.",
   },
   {
     id: "processor",
     label: "Processor / Acquirer",
-    color: "bg-purple-50 text-purple-700 border-purple-200",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "Processes the transaction on behalf of the merchant. Manages clearing and settlement.",
   },
   {
     id: "network",
     label: "Card Network",
-    color: "bg-orange-50 text-orange-700 border-orange-200",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "Visa / Mastercard / Amex. Routes auth requests, sets interchange rates, governs dispute rules.",
   },
   {
     id: "issuer",
     label: "Issuing Bank",
-    color: "bg-green-50 text-green-700 border-green-200",
+    color: "bg-gray-50 text-gray-700 border-gray-200",
     description: "The cardholder's bank. Approves or declines the auth request, holds the cardholder's funds.",
   },
 ];
@@ -101,9 +101,9 @@ const STAGES: Stage[] = [
     id: "authorization",
     label: "2. Authorization",
     sublabel: "Approval request & response",
-    color: "text-blue-700",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-200",
+    color: "text-gray-700",
+    bgColor: "bg-gray-50",
+    borderColor: "border-gray-300",
     party: "issuer",
     timing: "1–3 seconds",
     description:
@@ -130,9 +130,9 @@ const STAGES: Stage[] = [
     id: "capture",
     label: "3. Capture",
     sublabel: "Merchant confirms amount",
-    color: "text-indigo-700",
-    bgColor: "bg-indigo-50",
-    borderColor: "border-indigo-200",
+    color: "text-gray-700",
+    bgColor: "bg-gray-50",
+    borderColor: "border-gray-300",
     party: "merchant",
     timing: "Seconds to hours",
     description:
@@ -158,9 +158,9 @@ const STAGES: Stage[] = [
     id: "clearing",
     label: "4. Clearing",
     sublabel: "Transaction submitted to network",
-    color: "text-purple-700",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
+    color: "text-gray-700",
+    bgColor: "bg-gray-50",
+    borderColor: "border-gray-300",
     party: "network",
     timing: "Same day, batch",
     description:
@@ -215,9 +215,9 @@ const STAGES: Stage[] = [
     id: "reconciliation",
     label: "6. Reconciliation",
     sublabel: "Verify every cent matches",
-    color: "text-teal-700",
-    bgColor: "bg-teal-50",
-    borderColor: "border-teal-200",
+    color: "text-gray-700",
+    bgColor: "bg-gray-50",
+    borderColor: "border-gray-300",
     party: "processor",
     timing: "Daily, T+1",
     description:
@@ -280,12 +280,12 @@ const PARTY_LABELS: Record<string, string> = {
 };
 
 const PARTY_COLORS: Record<string, string> = {
-  cardholder: "bg-slate-100 text-slate-700 border-slate-300",
-  merchant:   "bg-blue-50 text-blue-700 border-blue-200",
-  gateway:    "bg-indigo-50 text-indigo-700 border-indigo-200",
-  processor:  "bg-purple-50 text-purple-700 border-purple-200",
-  network:    "bg-orange-50 text-orange-700 border-orange-200",
-  issuer:     "bg-green-50 text-green-700 border-green-200",
+  cardholder: "bg-gray-50 text-gray-700 border-gray-200",
+  merchant:   "bg-gray-50 text-gray-700 border-gray-200",
+  gateway:    "bg-gray-50 text-gray-700 border-gray-200",
+  processor:  "bg-gray-50 text-gray-700 border-gray-200",
+  network:    "bg-gray-50 text-gray-700 border-gray-200",
+  issuer:     "bg-gray-50 text-gray-700 border-gray-200",
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -403,13 +403,13 @@ export default function CardLifecycle() {
                   className={clsx(
                     "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium border",
                     active
-                      ? "bg-white border-slate-300 text-slate-700"
-                      : "bg-slate-50 border-slate-200 text-slate-300"
+                      ? "bg-white border-gray-300 text-gray-700"
+                      : "bg-gray-50 border-gray-200 text-gray-300"
                   )}
                 >
                   <span>{icon}</span>
                   <span>{label}</span>
-                  <span className={active ? "text-green-500" : "text-slate-200"}>
+                  <span className={active ? "text-green-600" : "text-slate-200"}>
                     {active ? "✓" : "✗"}
                   </span>
                 </div>

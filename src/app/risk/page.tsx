@@ -56,7 +56,7 @@ const DECISION_COLORS: Record<string, string> = {
   approve: "bg-green-100 text-green-800 border-green-200",
   decline: "bg-red-100 text-red-800 border-red-200",
   review: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  challenge_3ds: "bg-blue-100 text-blue-800 border-blue-200",
+  challenge_3ds: "bg-gray-50 text-blue-800 border-gray-200",
 };
 
 const DECISION_LABEL: Record<string, string> = {
@@ -70,7 +70,7 @@ const REVIEW_COLORS: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
   approved: "bg-green-100 text-green-800",
   declined: "bg-red-100 text-red-800",
-  escalated: "bg-orange-100 text-orange-800",
+  escalated: "bg-gray-50 text-orange-800",
 };
 
 const FRAUD_TYPE_LABEL: Record<string, string> = {
@@ -101,7 +101,7 @@ function riskColor(score: number): string {
 
 function riskBg(score: number): string {
   if (score >= 700) return "bg-red-50";
-  if (score >= 500) return "bg-orange-50";
+  if (score >= 500) return "bg-gray-50";
   if (score >= 350) return "bg-yellow-50";
   return "bg-green-50";
 }
@@ -127,7 +127,7 @@ function RiskScoreBar({ score }: { score: number }) {
     score >= 700
       ? "bg-red-500"
       : score >= 500
-        ? "bg-orange-500"
+        ? "bg-gray-50"
         : score >= 350
           ? "bg-yellow-500"
           : "bg-green-500";
@@ -319,7 +319,7 @@ function OverviewTab({ events }: { events: RiskEvent[] }) {
                 className={clsx("rounded-xl border p-4", item.bg)}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Icon className={clsx("h-4 w-4", item.color)} />
+                  <Icon className="h-4 w-4 text-gray-500" />
                   <span className="text-xs font-semibold text-slate-700">
                     {item.label}
                   </span>
@@ -375,7 +375,7 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                   onClick={() => setSelected(e)}
                   className={clsx(
                     "border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors",
-                    selected?.id === e.id && "bg-blue-50",
+                    selected?.id === e.id && "bg-gray-50",
                     e.riskScore >= 700 && "bg-red-50 hover:bg-red-100",
                   )}
                 >
@@ -395,12 +395,12 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                   <td className="px-3 py-2.5">
                     <div className="flex gap-1 flex-wrap">
                       {e.isVPNOrProxy && (
-                        <span className="rounded bg-purple-100 px-1 text-[10px] font-medium text-purple-700">
+                        <span className="rounded bg-gray-50 px-1 text-[10px] font-medium text-purple-700">
                           VPN
                         </span>
                       )}
                       {e.countryMismatch && (
-                        <span className="rounded bg-orange-100 px-1 text-[10px] font-medium text-orange-700">
+                        <span className="rounded bg-gray-50 px-1 text-[10px] font-medium text-orange-700">
                           GEO
                         </span>
                       )}
@@ -410,7 +410,7 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                         </span>
                       )}
                       {e.isNewDevice && (
-                        <span className="rounded bg-blue-100 px-1 text-[10px] font-medium text-blue-700">
+                        <span className="rounded bg-gray-50 px-1 text-[10px] font-medium text-blue-700">
                           DEV
                         </span>
                       )}
@@ -443,7 +443,7 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
               selected.riskScore >= 700
                 ? "border-red-300"
                 : selected.riskScore >= 500
-                  ? "border-orange-300"
+                  ? "border-gray-200"
                   : "border-slate-200",
             )}
           >
@@ -484,10 +484,8 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                 },
               ].map(({ label, value }) => (
                 <div key={label} className="rounded-lg bg-white p-2">
-                  <p className="text-[10px] text-slate-400">{label}</p>
-                  <p className="text-xs font-semibold text-slate-900">
-                    {value}
-                  </p>
+                  <p className="text-[10px] text-gray-400">{label}</p>
+                  <p className="text-xs font-semibold text-gray-900">{value}</p>
                 </div>
               ))}
             </div>
@@ -584,7 +582,7 @@ function ReviewQueueTab({ events }: { events: RiskEvent[] }) {
           {
             label: "Escalated",
             value: queue.filter((e) => e.reviewStatus === "escalated").length,
-            color: "border-l-orange-500",
+            color: "border-l-gray-300",
           },
         ].map((m) => (
           <div
@@ -758,7 +756,7 @@ function FraudCasesTab({ cases }: { cases: FraudCase[] }) {
             {cases.length}
           </p>
         </div>
-        <div className="rounded-xl border border-l-4 border-orange-500 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-l-4 border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
             Total loss
           </p>
@@ -856,7 +854,7 @@ function FraudCasesTab({ cases }: { cases: FraudCase[] }) {
                           ? "bg-slate-100 text-slate-600"
                           : c.status === "investigating"
                             ? "bg-yellow-100 text-yellow-700"
-                            : "bg-orange-100 text-orange-700",
+                            : "bg-gray-50 text-orange-700",
                     )}
                   >
                     {c.status}
@@ -923,7 +921,7 @@ function RulesTab({ rules }: { rules: RiskRule[] }) {
                       onClick={() => setActive(r)}
                       className={clsx(
                         "border-b border-slate-50 cursor-pointer hover:bg-slate-50",
-                        active?.id === r.id && "bg-blue-50",
+                        active?.id === r.id && "bg-gray-50",
                       )}
                     >
                       <td className="px-4 py-2.5 font-mono font-semibold text-slate-600">
@@ -941,7 +939,7 @@ function RulesTab({ rules }: { rules: RiskRule[] }) {
                               : r.action === "flag"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : r.action === "challenge"
-                                  ? "bg-blue-100 text-blue-700"
+                                  ? "bg-gray-50 text-blue-700"
                                   : "bg-green-100 text-green-700",
                           )}
                         >
@@ -1021,7 +1019,7 @@ function RulesTab({ rules }: { rules: RiskRule[] }) {
                 </div>
               ))}
             </div>
-            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
               <p className="text-xs text-amber-800">
                 <strong>
                   False positive rate{" "}
@@ -1043,7 +1041,7 @@ function ConceptsTab() {
   const concepts = [
     {
       title: "Risk score",
-      color: "border-l-blue-500",
+      color: "border-l-gray-300",
       body: "A numeric score (0–1000) representing the likelihood that a transaction is fraudulent. Calculated by combining signals: device trust, velocity, geo mismatch, behavioral patterns. Score thresholds map to decisions: approve, 3DS challenge, manual review, or decline.",
     },
     {
@@ -1053,22 +1051,22 @@ function ConceptsTab() {
     },
     {
       title: "Velocity controls",
-      color: "border-l-purple-500",
+      color: "border-l-gray-300",
       body: "Rules that count events over a time window. Example: block if > 5 transactions on the same card in 10 minutes. Velocity checks happen in real time using sliding window counters in Redis or similar. They catch card testing attacks — fraudsters make small test transactions before big ones.",
     },
     {
       title: "Device fingerprinting",
-      color: "border-l-indigo-500",
+      color: "border-l-gray-300",
       body: "Creating a unique identifier for a device using browser/OS signals: user agent, screen resolution, installed fonts, WebGL renderer, battery level, timezone. A returning trusted device has high device score. A new device, especially one using incognito mode or a VM, has low score.",
     },
     {
       title: "Friendly fraud",
-      color: "border-l-orange-500",
+      color: "border-l-gray-300",
       body: "When the cardholder IS the fraudster — they make a legitimate purchase and then dispute it as unauthorized to get a refund while keeping the goods. Accounts for 40–80% of chargebacks in e-commerce. Hard to detect because the transaction signals look legitimate. Evidence of delivery is the primary defense.",
     },
     {
       title: "Account takeover (ATO)",
-      color: "border-l-rose-500",
+      color: "border-l-gray-300",
       body: "A fraudster gains access to a legitimate account — usually via phishing, credential stuffing, or social engineering. They change the email/password/phone then make purchases. ATO is detected by: impossible travel, new device from unusual location, sudden change in spending pattern.",
     },
     {
@@ -1078,7 +1076,7 @@ function ConceptsTab() {
     },
     {
       title: "Rule engine vs ML scoring",
-      color: "border-l-teal-500",
+      color: "border-l-gray-300",
       body: "Rule engines are fast, explainable, and easy to update. ML models find complex non-linear patterns humans miss. Production fraud systems use both: rule engine for hard blocks (card on watchlist = always decline), ML for probabilistic scoring. Rules handle the obvious cases; ML handles the subtle ones.",
     },
   ];
@@ -1172,7 +1170,7 @@ export default function RiskPage() {
             className={clsx(
               "px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
               tab === t
-                ? "border-amber-500 text-amber-600"
+                ? "border-gray-200 text-amber-600"
                 : "border-transparent text-slate-500 hover:text-slate-700",
             )}
           >

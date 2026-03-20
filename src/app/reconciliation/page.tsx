@@ -27,11 +27,11 @@ type Tab = typeof TABS[number];
 const STATUS_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
   matched:           { label: "Matched",            color: "text-green-700",  bg: "bg-green-50",   border: "border-green-200" },
   unmatched:         { label: "Unmatched",           color: "text-red-700",    bg: "bg-red-50",     border: "border-red-200" },
-  mismatched_amount: { label: "Amount mismatch",     color: "text-orange-700", bg: "bg-orange-50",  border: "border-orange-200" },
-  duplicate:         { label: "Duplicate",           color: "text-purple-700", bg: "bg-purple-50",  border: "border-purple-200" },
-  timing_difference: { label: "Timing difference",   color: "text-blue-700",   bg: "bg-blue-50",    border: "border-blue-200" },
-  missing_in_bank:   { label: "Missing in bank",     color: "text-rose-700",   bg: "bg-rose-50",    border: "border-rose-200" },
-  missing_in_ledger: { label: "Missing in ledger",   color: "text-amber-700",  bg: "bg-amber-50",   border: "border-amber-200" },
+  mismatched_amount: { label: "Amount mismatch",     color: "text-orange-700", bg: "bg-gray-50",  border: "border-gray-200" },
+  duplicate:         { label: "Duplicate",           color: "text-purple-700", bg: "bg-gray-50",  border: "border-gray-200" },
+  timing_difference: { label: "Timing difference",   color: "text-blue-700",   bg: "bg-gray-50",    border: "border-gray-200" },
+  missing_in_bank:   { label: "Missing in bank",     color: "text-rose-700",   bg: "bg-gray-50",    border: "border-gray-200" },
+  missing_in_ledger: { label: "Missing in ledger",   color: "text-amber-700",  bg: "bg-gray-50",   border: "border-gray-200" },
 };
 
 function StatusPill({ status }: { status: string }) {
@@ -109,8 +109,8 @@ function OverviewTab({ records, batches }: { records: ReconRecord[]; batches: Re
         <p className="text-xs text-slate-400 mb-4">Every record must match across three independent sources</p>
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: "Internal ledger",     icon: "📒", desc: "Your system's record of every transaction. Source of truth for what you believe happened.", color: "border-blue-200 bg-blue-50" },
-            { label: "Processor file",      icon: "📄", desc: "The settlement file from your processor (Stripe, Adyen, etc). Contains their view of captured and settled transactions.", color: "border-purple-200 bg-purple-50" },
+            { label: "Internal ledger",     icon: "📒", desc: "Your system's record of every transaction. Source of truth for what you believe happened.", color: "border-gray-200 bg-gray-50" },
+            { label: "Processor file",      icon: "📄", desc: "The settlement file from your processor (Stripe, Adyen, etc). Contains their view of captured and settled transactions.", color: "border-gray-200 bg-gray-50" },
             { label: "Bank statement",      icon: "🏦", desc: "The actual bank account statement. Shows real fund movements. The ultimate source of financial truth.", color: "border-green-200 bg-green-50" },
           ].map((s) => (
             <div key={s.label} className={clsx("rounded-xl border p-4", s.color)}>
@@ -164,7 +164,7 @@ function BreakAnalysisTab({ records }: { records: ReconRecord[] }) {
               {filtered.map((r) => (
                 <tr key={r.id} onClick={() => setSelected(r)}
                   className={clsx("border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors",
-                    selected?.id === r.id && "bg-blue-50"
+                    selected?.id === r.id && "bg-gray-50"
                   )}>
                   <td className="px-4 py-2.5 font-mono text-slate-400">{r.id}</td>
                   <td className="px-4 py-2.5 font-medium text-slate-900">{r.merchantName}</td>
@@ -261,7 +261,7 @@ function BreakAnalysisTab({ records }: { records: ReconRecord[] }) {
                 <p className="text-xs text-green-500">By {selected.resolvedBy} · {timeAgo(selected.resolvedAt)}</p>
               </div>
             ) : (
-              <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+              <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
                 <p className="text-xs font-semibold text-amber-700 flex items-center gap-1">
                   <AlertTriangle className="h-3 w-3" /> Open break — needs investigation
                 </p>
@@ -301,7 +301,7 @@ function LedgerTab({ entries }: { entries: LedgerEntry[] }) {
           <tbody>
             {entries.map((e) => (
               <tr key={e.id} className={clsx("border-b border-slate-50 hover:bg-slate-50",
-                !e.isReconciled && "bg-amber-50"
+                !e.isReconciled && "bg-gray-50"
               )}>
                 <td className="px-4 py-2.5 font-mono text-slate-400">{e.id}</td>
                 <td className="px-4 py-2.5 text-slate-700">{e.accountName}</td>
@@ -337,7 +337,7 @@ function LedgerTab({ entries }: { entries: LedgerEntry[] }) {
 function BatchesTab({ batches }: { batches: ReconBatch[] }) {
   const STATUS_COLORS: Record<string, string> = {
     complete:     "bg-green-100 text-green-700",
-    running:      "bg-blue-100 text-blue-700",
+    running:      "bg-gray-50 text-blue-700",
     needs_review: "bg-red-100 text-red-700",
   };
 
@@ -394,7 +394,7 @@ function ConceptsTab() {
   const concepts = [
     {
       title: "What reconciliation actually is",
-      color: "border-l-blue-500",
+      color: "border-l-gray-300",
       body: "Reconciliation is the process of confirming that your internal records match external sources. In payments: your ledger must match the processor's settlement file, which must match your bank statement. If all three agree — reconciled. If not — you have a break.",
     },
     {
@@ -404,17 +404,17 @@ function ConceptsTab() {
     },
     {
       title: "Break types",
-      color: "border-l-orange-500",
+      color: "border-l-gray-300",
       body: "Unmatched: in one source but not the other. Mismatched amount: present in both but different amounts. Timing difference: transaction crossed a cut-off window — will match tomorrow. Duplicate: same transaction recorded twice. Missing in bank: paid out but bank hasn't received it yet.",
     },
     {
       title: "Ledger drift",
-      color: "border-l-purple-500",
+      color: "border-l-gray-300",
       body: "When your internal ledger gradually diverges from reality due to accumulated small errors. A $0.01 rounding error on 10 million transactions = $100,000 discrepancy. Ledger drift is often caused by async processing, retry bugs, or timezone mishandling. It compounds over time and is very hard to reverse-engineer.",
     },
     {
       title: "Idempotency in reconciliation",
-      color: "border-l-teal-500",
+      color: "border-l-gray-300",
       body: "Every payment operation must be idempotent — if a webhook fires twice, the ledger should only post once. Idempotency keys prevent duplicate entries. Without them, a retry storm (common during outages) creates duplicate ledger entries that are almost impossible to unwind at scale.",
     },
     {
@@ -424,12 +424,12 @@ function ConceptsTab() {
     },
     {
       title: "Cut-off windows",
-      color: "border-l-amber-500",
+      color: "border-l-gray-300",
       body: "Settlement happens in batches with strict cut-off times. A transaction captured at 11:59pm may settle in today's batch; the same transaction at 12:01am is tomorrow's. This creates systematic timing differences that a reconciliation system must understand — they're not errors, they're expected.",
     },
     {
       title: "Exception handling",
-      color: "border-l-rose-500",
+      color: "border-l-gray-300",
       body: "Every reconciliation system needs an exception queue — a place for breaks to sit while being investigated. Exceptions need SLAs (e.g. all >$1,000 breaks resolved within 24h), ownership (which team investigates), and an audit trail of every action taken. Unmanaged exceptions compound into larger problems.",
     },
   ];
@@ -501,7 +501,7 @@ export default function ReconPage() {
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={clsx("px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === t ? "border-green-600 text-green-600" : "border-transparent text-slate-500 hover:text-slate-700"
+              tab === t ? "border-gray-900 text-gray-900" : "border-transparent text-slate-500 hover:text-slate-700"
             )}>
             {t}
           </button>

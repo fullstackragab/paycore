@@ -29,16 +29,16 @@ const KYC_STATUS_META: Record<string, { label: string; color: string }> = {
   approved:     { label: "Approved",     color: "bg-green-100 text-green-800 border-green-200" },
   pending:      { label: "Pending",      color: "bg-yellow-100 text-yellow-800 border-yellow-200" },
   rejected:     { label: "Rejected",     color: "bg-red-100 text-red-800 border-red-200" },
-  needs_review: { label: "Needs review", color: "bg-orange-100 text-orange-800 border-orange-200" },
+  needs_review: { label: "Needs review", color: "bg-gray-50 text-orange-800 border-gray-200" },
   expired:      { label: "Expired",      color: "bg-slate-100 text-slate-600 border-slate-200" },
 };
 
 const AML_STATUS_META: Record<string, { label: string; color: string }> = {
   open:          { label: "Open",         color: "bg-red-100 text-red-800 border-red-200" },
   investigating: { label: "Investigating",color: "bg-yellow-100 text-yellow-800 border-yellow-200" },
-  escalated:     { label: "Escalated",    color: "bg-orange-100 text-orange-800 border-orange-200" },
+  escalated:     { label: "Escalated",    color: "bg-gray-50 text-orange-800 border-gray-200" },
   cleared:       { label: "Cleared",      color: "bg-green-100 text-green-800 border-green-200" },
-  reported:      { label: "SAR Filed",    color: "bg-purple-100 text-purple-800 border-purple-200" },
+  reported:      { label: "SAR Filed",    color: "bg-gray-50 text-purple-800 border-gray-200" },
 };
 
 const RISK_TIER_META: Record<string, { color: string; bg: string }> = {
@@ -163,9 +163,9 @@ function OverviewTab({ kyc, aml, reserves }: { kyc: KYCRecord[]; aml: AMLAlert[]
         <h3 className="text-sm font-semibold text-slate-900 mb-4">Compliance framework overview</h3>
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: "KYC",    full: "Know Your Customer",   color: "border-blue-200 bg-blue-50",   desc: "Verify identity of individuals. Passport, ID, address proof." },
-            { label: "KYB",    full: "Know Your Business",   color: "border-indigo-200 bg-indigo-50", desc: "Verify business entities, beneficial owners, and legitimacy." },
-            { label: "AML",    full: "Anti-Money Laundering",color: "border-orange-200 bg-orange-50",desc: "Monitor transactions for suspicious patterns and report to authorities." },
+            { label: "KYC",    full: "Know Your Customer",   color: "border-gray-200 bg-gray-50",   desc: "Verify identity of individuals. Passport, ID, address proof." },
+            { label: "KYB",    full: "Know Your Business",   color: "border-gray-200 bg-gray-50", desc: "Verify business entities, beneficial owners, and legitimacy." },
+            { label: "AML",    full: "Anti-Money Laundering",color: "border-gray-200 bg-gray-50",desc: "Monitor transactions for suspicious patterns and report to authorities." },
             { label: "Sanctions",full:"Sanctions screening", color: "border-red-200 bg-red-50",     desc: "Screen against OFAC, EU, UN lists. Block prohibited entities." },
           ].map((f) => (
             <div key={f.label} className={clsx("rounded-xl border p-4", f.color)}>
@@ -215,7 +215,7 @@ function KYCTab({ records }: { records: KYCRecord[] }) {
               {filtered.slice(0, 60).map((r) => (
                 <tr key={r.id} onClick={() => setSelected(r)}
                   className={clsx("border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors",
-                    selected?.id === r.id && "bg-blue-50",
+                    selected?.id === r.id && "bg-gray-50",
                     r.riskTier === "high" && "bg-red-50 hover:bg-red-100",
                   )}>
                   <td className="px-4 py-2.5 font-mono text-slate-400">{r.id}</td>
@@ -284,7 +284,7 @@ function KYCTab({ records }: { records: KYCRecord[] }) {
             </div>
 
             {selected.notes && (
-              <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+              <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
                 <p className="text-xs font-semibold text-amber-700 mb-1">Review notes</p>
                 <p className="text-xs text-amber-600 leading-relaxed">{selected.notes}</p>
               </div>
@@ -339,7 +339,7 @@ function AMLTab({ alerts }: { alerts: AMLAlert[] }) {
               {filtered.slice(0, 60).map((a) => (
                 <tr key={a.id} onClick={() => setSelected(a)}
                   className={clsx("border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors",
-                    selected?.id === a.id && "bg-blue-50",
+                    selected?.id === a.id && "bg-gray-50",
                     ["open","escalated"].includes(a.status) && "bg-red-50 hover:bg-red-100",
                   )}>
                   <td className="px-3 py-2.5 font-mono text-slate-400">{a.id}</td>
@@ -348,7 +348,7 @@ function AMLTab({ alerts }: { alerts: AMLAlert[] }) {
                   <td className="px-3 py-2.5">
                     <div className="flex items-center gap-1.5">
                       <div className="flex-1 h-1.5 bg-slate-100 rounded-full w-12">
-                        <div className={clsx("h-full rounded-full", a.riskScore >= 70 ? "bg-red-500" : a.riskScore >= 50 ? "bg-orange-400" : "bg-yellow-400")}
+                        <div className={clsx("h-full rounded-full", a.riskScore >= 70 ? "bg-red-500" : a.riskScore >= 50 ? "bg-gray-50" : "bg-yellow-400")}
                           style={{ width: `${a.riskScore}%` }} />
                       </div>
                       <span className="text-xs font-semibold text-slate-700">{a.riskScore}</span>
@@ -357,7 +357,7 @@ function AMLTab({ alerts }: { alerts: AMLAlert[] }) {
                   <td className="px-3 py-2.5 font-semibold text-slate-900">{formatCentsCompact(a.totalAmount)}</td>
                   <td className="px-3 py-2.5 text-slate-600">{a.transactionCount}</td>
                   <td className="px-3 py-2.5">
-                    {a.sarFiled && <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700">SAR</span>}
+                    {a.sarFiled && <span className="rounded bg-gray-50 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700">SAR</span>}
                   </td>
                   <td className="px-3 py-2.5"><AMLBadge status={a.status} /></td>
                   <td className="px-3 py-2.5 text-slate-400">{timeAgo(a.createdAt)}</td>
@@ -377,12 +377,12 @@ function AMLTab({ alerts }: { alerts: AMLAlert[] }) {
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 <AMLBadge status={selected.status} />
                 {selected.sarFiled && (
-                  <span className="rounded-full bg-purple-100 border border-purple-200 px-2 py-0.5 text-xs font-semibold text-purple-700">SAR Filed</span>
+                  <span className="rounded-full bg-gray-50 border border-gray-200 px-2 py-0.5 text-xs font-semibold text-purple-700">SAR Filed</span>
                 )}
               </div>
             </div>
 
-            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
               <p className="text-xs font-semibold text-amber-800 mb-1">{AML_TYPE_LABEL[selected.alertType]}</p>
               <p className="text-xs text-amber-700 leading-relaxed">{selected.description}</p>
             </div>
@@ -428,9 +428,9 @@ function ReservesTab({ reserves }: { reserves: ReserveAccount[] }) {
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Rolling reserve",  desc: "Fixed % of each settlement withheld, released after 90–180 days", color: "border-l-blue-500" },
-          { label: "Fixed reserve",    desc: "Fixed lump sum withheld upfront, released when contract ends",     color: "border-l-purple-500" },
-          { label: "Capped reserve",   desc: "Rolling reserve up to a maximum cap, then no further withholding", color: "border-l-teal-500" },
+          { label: "Rolling reserve",  desc: "Fixed % of each settlement withheld, released after 90–180 days", color: "border-l-gray-300" },
+          { label: "Fixed reserve",    desc: "Fixed lump sum withheld upfront, released when contract ends",     color: "border-l-gray-300" },
+          { label: "Capped reserve",   desc: "Rolling reserve up to a maximum cap, then no further withholding", color: "border-l-gray-300" },
         ].map((r) => (
           <div key={r.label} className={`rounded-xl border border-slate-200 bg-white p-4 shadow-sm border-l-4 ${r.color}`}>
             <p className="text-sm font-semibold text-slate-900">{r.label}</p>
@@ -495,7 +495,7 @@ function TreasuryTab({ positions }: { positions: TreasuryPosition[] }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-xl border border-l-4 border-blue-500 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-l-4 border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Total nostro balance</p>
           <p className="mt-1 text-xl font-semibold text-slate-900">{formatCentsCompact(totalNostro)}</p>
           <p className="text-xs text-slate-400 mt-0.5">Across {positions.length} currencies</p>
@@ -505,7 +505,7 @@ function TreasuryTab({ positions }: { positions: TreasuryPosition[] }) {
           <p className="mt-1 text-xl font-semibold text-slate-900">{formatCentsCompact(positions.reduce((s,p) => s + p.availableAmount, 0))}</p>
           <p className="text-xs text-slate-400 mt-0.5">After prefunding and reserves</p>
         </div>
-        <div className="rounded-xl border border-l-4 border-amber-500 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-l-4 border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Pending outbound</p>
           <p className="mt-1 text-xl font-semibold text-slate-900">{formatCentsCompact(positions.reduce((s,p) => s + p.pendingOutbound, 0))}</p>
           <p className="text-xs text-slate-400 mt-0.5">Awaiting settlement</p>
@@ -549,17 +549,17 @@ function ConceptsTab() {
   const concepts = [
     {
       title: "KYC vs KYB",
-      color: "border-l-blue-500",
+      color: "border-l-gray-300",
       body: "KYC (Know Your Customer) verifies individual identity — passport, national ID, selfie, address proof. KYB (Know Your Business) verifies business entities — incorporation documents, UBO (Ultimate Beneficial Owner) declaration, director IDs. Both have ongoing requirements: documents expire, risk tiers change, re-verification is triggered by suspicious activity.",
     },
     {
       title: "Risk-based approach",
-      color: "border-l-purple-500",
+      color: "border-l-gray-300",
       body: "Regulations don't mandate the same checks for everyone — they mandate a risk-based approach. Low-risk customers (domestic, small amounts, transparent purpose) get lighter-touch checks. High-risk customers (PEPs, high-risk countries, complex structures) get enhanced due diligence (EDD): source of wealth questions, senior management approval, frequent re-review.",
     },
     {
       title: "AML transaction monitoring",
-      color: "border-l-orange-500",
+      color: "border-l-gray-300",
       body: "Rule-based and ML-powered systems watch for patterns: structuring (multiple transactions just below $10K to avoid CTR filing), layering (rapid movement through multiple accounts to obscure origin), integration (reintroducing funds into the legitimate economy). Monitoring must be calibrated — too sensitive = alert fatigue, too loose = regulatory risk.",
     },
     {
@@ -569,7 +569,7 @@ function ConceptsTab() {
     },
     {
       title: "Merchant reserves",
-      color: "border-l-teal-500",
+      color: "border-l-gray-300",
       body: "Processors hold merchant reserves to protect against chargeback liability. If a merchant goes out of business or their chargeback rate spikes, the processor is liable to issuers. The reserve is the buffer. Rolling reserves (5–10% withheld, released after 90–180 days) are most common. High-risk merchants face larger reserves, sometimes 10–20%.",
     },
     {
@@ -579,12 +579,12 @@ function ConceptsTab() {
     },
     {
       title: "Safeguarding",
-      color: "border-l-amber-500",
+      color: "border-l-gray-300",
       body: "E-money institutions and payment institutions must segregate customer funds from their own operating funds. This 'safeguarding' requirement ensures that if the institution fails, customer funds are protected. Funds must be held in a segregated bank account or invested in high-quality liquid assets. Safeguarding audits are a regulatory requirement.",
     },
     {
       title: "Licensing basics",
-      color: "border-l-rose-500",
+      color: "border-l-gray-300",
       body: "Operating a payment service requires a license. In the EU: PSD2 Payment Institution or E-Money Institution license. In the US: Money Transmitter License in each state (or partner with a licensed sponsor bank). In the UK: FCA authorization. Licensing determines what products you can offer, what capital you must hold, and what regulations apply.",
     },
   ];
@@ -658,7 +658,7 @@ export default function CompliancePage() {
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={clsx("px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === t ? "border-purple-600 text-purple-600" : "border-transparent text-slate-500 hover:text-slate-700"
+              tab === t ? "border-gray-200 text-purple-600" : "border-transparent text-slate-500 hover:text-slate-700"
             )}>
             {t}
           </button>

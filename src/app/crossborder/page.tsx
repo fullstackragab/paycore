@@ -105,8 +105,8 @@ const SWIFT_STAGES = [
     id: "fx",
     label: "3. FX conversion",
     color: "text-blue-700",
-    bg: "bg-blue-50",
-    border: "border-blue-200",
+    bg: "bg-gray-50",
+    border: "border-gray-200",
     timing: "T+0 (seconds for spot)",
     description:
       "If sender and receiver currencies differ, the bank executes an FX conversion. Spot rates apply for same-day conversion. The spread between bid and ask is the bank's FX margin. Large transactions may use forward contracts.",
@@ -124,8 +124,8 @@ const SWIFT_STAGES = [
     id: "swift_message",
     label: "4. SWIFT messaging",
     color: "text-indigo-700",
-    bg: "bg-indigo-50",
-    border: "border-indigo-200",
+    bg: "bg-gray-50",
+    border: "border-gray-200",
     timing: "T+0 to T+1",
     description:
       "The ordering bank sends an MT103 message through the SWIFT network to the beneficiary bank (or correspondent). SWIFT is a messaging network — it does not move money. It instructs banks to debit and credit their nostro/vostro accounts.",
@@ -143,8 +143,8 @@ const SWIFT_STAGES = [
     id: "correspondent",
     label: "5. Correspondent chain",
     color: "text-purple-700",
-    bg: "bg-purple-50",
-    border: "border-purple-200",
+    bg: "bg-gray-50",
+    border: "border-gray-200",
     timing: "T+0 to T+2",
     description:
       "For many corridors, no direct banking relationship exists. The payment routes through one or two correspondent banks. Each correspondent charges a 'lifting fee' and may apply additional compliance checks, adding delays.",
@@ -317,7 +317,7 @@ function OverviewTab({ payments }: { payments: CrossBorderPayment[] }) {
                 width={160}
               />
               <Tooltip />
-              <Bar dataKey="value" fill="#6366f1" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="value" fill="#374151" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -433,8 +433,8 @@ function PaymentsTab({ payments }: { payments: CrossBorderPayment[] }) {
                   onClick={() => setSelected(p)}
                   className={clsx(
                     "border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors",
-                    selected?.id === p.id && "bg-blue-50",
-                    p.status === "sanctions_hold" && "bg-rose-50",
+                    selected?.id === p.id && "bg-gray-50",
+                    p.status === "sanctions_hold" && "bg-gray-50",
                   )}
                 >
                   <td className="px-3 py-2.5 font-mono text-slate-500">
@@ -483,8 +483,8 @@ function PaymentsTab({ payments }: { payments: CrossBorderPayment[] }) {
             </div>
 
             {selected.status === "sanctions_hold" && (
-              <div className="rounded-lg bg-rose-50 border border-rose-200 p-3 flex gap-2">
-                <ShieldAlert className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+              <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 flex gap-2">
+                <ShieldAlert className="h-4 w-4 text-gray-500 shrink-0 mt-0.5" />
                 <p className="text-xs text-rose-700 font-medium">
                   Payment held for sanctions review. Requires compliance team
                   action.
@@ -863,20 +863,20 @@ function SWIFTTab() {
             },
             {
               code: "SHA",
-              color: "bg-blue-50 border-blue-200",
+              color: "bg-gray-50 border-gray-200",
               label: "Shared",
               desc: "Sender pays originating fees, beneficiary pays receiving fees. Most common option for B2B transfers.",
             },
             {
               code: "BEN",
-              color: "bg-amber-50 border-amber-200",
+              color: "bg-gray-50 border-gray-200",
               label: "Beneficiary pays",
               desc: "All charges deducted from the transfer amount. Beneficiary receives less than sent. Uncommon in practice.",
             },
           ].map((c) => (
             <div
               key={c.code}
-              className={clsx("rounded-lg border p-4", c.color)}
+              className={clsx("rounded border p-4 bg-gray-50 border-gray-200")}
             >
               <p className="text-sm font-bold text-slate-900">{c.code}</p>
               <p className="text-xs font-semibold text-slate-700 mt-0.5">
@@ -929,7 +929,7 @@ function ComplianceTab({ payments }: { payments: CrossBorderPayment[] }) {
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-xl border border-l-4 border-rose-500 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-l-4 border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
             Sanctions holds
           </p>
@@ -987,7 +987,7 @@ function ComplianceTab({ payments }: { payments: CrossBorderPayment[] }) {
       </div>
 
       {holds.length > 0 && (
-        <div className="rounded-xl border border-rose-200 bg-rose-50 p-5 shadow-sm">
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <ShieldAlert className="h-4 w-4 text-rose-600" />
             <h3 className="text-sm font-semibold text-rose-800">
@@ -998,7 +998,7 @@ function ComplianceTab({ payments }: { payments: CrossBorderPayment[] }) {
             {holds.map((p) => (
               <div
                 key={p.id}
-                className="rounded-lg bg-white border border-rose-200 p-3 flex items-start justify-between gap-3"
+                className="rounded-lg bg-white border border-gray-200 p-3 flex items-start justify-between gap-3"
               >
                 <div>
                   <p className="text-xs font-semibold text-slate-900">
@@ -1012,7 +1012,7 @@ function ComplianceTab({ payments }: { payments: CrossBorderPayment[] }) {
                     {p.id}
                   </p>
                 </div>
-                <span className="shrink-0 rounded-full bg-rose-100 border border-rose-200 px-2 py-1 text-xs font-semibold text-rose-700">
+                <span className="shrink-0 rounded-full bg-gray-50 border border-gray-200 px-2 py-1 text-xs font-semibold text-rose-700">
                   HOLD
                 </span>
               </div>
@@ -1111,7 +1111,7 @@ function SWIFTLifecycleTab() {
         <p className="text-sm text-slate-700 leading-relaxed mb-4">
           {selected.description}
         </p>
-        <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 mb-4 flex gap-2">
+        <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 mb-4 flex gap-2">
           <AlertTriangle className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
           <p className="text-xs text-amber-800 font-medium">
             {selected.keyPoint}
@@ -1207,7 +1207,7 @@ export default function CrossBorderPage() {
             className={clsx(
               "px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors",
               tab === t
-                ? "border-orange-500 text-orange-600"
+                ? "border-gray-200 text-orange-600"
                 : "border-transparent text-slate-500 hover:text-slate-700",
             )}
           >
