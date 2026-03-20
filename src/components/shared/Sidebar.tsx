@@ -39,7 +39,7 @@ const NAV = [
     label: "Cross-Border",
     href: "/crossborder",
     icon: Globe,
-    live: false,
+    live: true,
     phase: 3,
   },
   {

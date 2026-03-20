@@ -236,3 +236,103 @@ export interface BankMetrics {
   returnedVolume: number;
   sameDayCount: number;
 }
+
+// ─── Cross-border types ───────────────────────────────────────────────────────
+
+export type CrossBorderStatus =
+  | "initiated"
+  | "compliance_check"
+  | "fx_converted"
+  | "swift_sent"
+  | "intermediary_processing"
+  | "credited"
+  | "failed"
+  | "returned"
+  | "sanctions_hold";
+
+export type SWIFTMessageType =
+  | "MT103"   // Single customer credit transfer
+  | "MT202"   // General financial institution transfer
+  | "MT199"   // Free format message
+  | "MT900"   // Confirmation of debit
+  | "MT910";  // Confirmation of credit
+
+export type SanctionsResult = "clear" | "hold" | "blocked";
+export type FXConversionType = "spot" | "forward" | "swap";
+
+export interface CrossBorderPayment {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+
+  // Parties
+  senderName: string;
+  senderBank: string;
+  senderBIC: string;
+  senderCountry: string;
+  receiverName: string;
+  receiverBank: string;
+  receiverBIC: string;
+  receiverCountry: string;
+
+  // Correspondent chain
+  correspondentBank1?: string;
+  correspondentBank2?: string;
+  nostroAccount: string;
+
+  // Amounts and FX
+  sendAmount: number;         // in sender currency cents
+  sendCurrency: string;
+  receiveAmount: number;      // in receiver currency cents
+  receiveCurrency: string;
+  fxRate: number;             // e.g. 1.0823
+  fxConversionType: FXConversionType;
+  fxFee: number;              // in cents (sender currency)
+  liftingFees: number;        // correspondent bank fees in cents
+  ourFee: number;             // originator fee in cents
+
+  // SWIFT
+  swiftMessageType: SWIFTMessageType;
+  uetr: string;               // Unique End-to-end Transaction Reference (GPI)
+  endToEndRef: string;
+
+  // Compliance
+  sanctionsResult: SanctionsResult;
+  sanctionsScreenedAt?: string;
+  purposeCode: string;        // e.g. "SALA", "SUPP", "TRAD"
+  remittanceInfo: string;
+
+  // State
+  status: CrossBorderStatus;
+  failureReason?: string;
+
+  // Timeline
+  complianceCheckedAt?: string;
+  fxConvertedAt?: string;
+  swiftSentAt?: string;
+  creditedAt?: string;
+  estimatedArrival: string;   // ISO date
+  valueDating: string;        // ISO date - when receiver's bank posts it
+}
+
+export interface FXRate {
+  pair: string;               // e.g. "USD/EUR"
+  baseCurrency: string;
+  quoteCurrency: string;
+  rate: number;
+  bid: number;
+  ask: number;
+  spread: number;             // ask - bid
+  updatedAt: string;
+}
+
+export interface CrossBorderMetrics {
+  totalVolume: number;        // in USD cents
+  totalCount: number;
+  avgProcessingHours: number;
+  sanctionsHoldCount: number;
+  failedCount: number;
+  totalFXFees: number;
+  totalLiftingFees: number;
+  corridors: { from: string; to: string; count: number; volume: number }[];
+}

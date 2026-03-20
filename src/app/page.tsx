@@ -41,7 +41,7 @@ const DOMAINS = [
     label:   "Cross-Border",
     desc:    "SWIFT messaging, FX conversion, correspondent banking, sanctions screening.",
     href:    "/crossborder",
-    live:    false,
+    live: true,
     accent:  "bg-orange-500",
   },
   {

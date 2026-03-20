@@ -133,3 +133,37 @@ export const BANK_STATUS_COLORS: Record<string, string> = {
   failed:             "bg-red-100 text-red-800 border-red-200",
   cancelled:          "bg-slate-100 text-slate-500 border-slate-200",
 };
+
+// ─── Cross-border labels ──────────────────────────────────────────────────────
+
+export const XB_STATUS_LABEL: Record<string, string> = {
+  initiated:                "Initiated",
+  compliance_check:         "Compliance Check",
+  fx_converted:             "FX Converted",
+  swift_sent:               "SWIFT Sent",
+  intermediary_processing:  "Intermediary Processing",
+  credited:                 "Credited",
+  failed:                   "Failed",
+  returned:                 "Returned",
+  sanctions_hold:           "Sanctions Hold",
+};
+
+export const XB_STATUS_COLORS: Record<string, string> = {
+  initiated:                "bg-slate-100 text-slate-700 border-slate-200",
+  compliance_check:         "bg-yellow-100 text-yellow-800 border-yellow-200",
+  fx_converted:             "bg-blue-100 text-blue-800 border-blue-200",
+  swift_sent:               "bg-indigo-100 text-indigo-800 border-indigo-200",
+  intermediary_processing:  "bg-purple-100 text-purple-800 border-purple-200",
+  credited:                 "bg-green-100 text-green-800 border-green-200",
+  failed:                   "bg-red-100 text-red-800 border-red-200",
+  returned:                 "bg-orange-100 text-orange-800 border-orange-200",
+  sanctions_hold:           "bg-rose-100 text-rose-800 border-rose-200",
+};
+
+export const SWIFT_TYPE_LABEL: Record<string, string> = {
+  MT103: "MT103 — Customer Credit Transfer",
+  MT202: "MT202 — Financial Institution Transfer",
+  MT199: "MT199 — Free Format Message",
+  MT900: "MT900 — Debit Confirmation",
+  MT910: "MT910 — Credit Confirmation",
+};
