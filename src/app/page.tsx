@@ -49,7 +49,7 @@ const DOMAINS = [
     label:   "Risk & Fraud",
     desc:    "Velocity controls, device scoring, rule engine, manual review queues.",
     href:    "/risk",
-    live:    false,
+    live: true,
     accent:  "bg-amber-500",
   },
   {

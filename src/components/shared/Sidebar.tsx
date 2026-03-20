@@ -46,7 +46,7 @@ const NAV = [
     label: "Risk & Fraud",
     href: "/risk",
     icon: ShieldAlert,
-    live: false,
+    live: true,
     phase: 4,
   },
   {

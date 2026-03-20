@@ -336,3 +336,96 @@ export interface CrossBorderMetrics {
   totalLiftingFees: number;
   corridors: { from: string; to: string; count: number; volume: number }[];
 }
+
+// ─── Risk & Fraud types ───────────────────────────────────────────────────────
+
+export type FraudType =
+  | "card_not_present"
+  | "account_takeover"
+  | "friendly_fraud"
+  | "identity_theft"
+  | "merchant_fraud"
+  | "mule_account"
+  | "social_engineering"
+  | "velocity_abuse";
+
+export type RiskDecision = "approve" | "decline" | "review" | "challenge_3ds";
+
+export type ReviewStatus = "pending" | "approved" | "declined" | "escalated";
+
+export type RuleAction = "approve" | "decline" | "flag" | "challenge";
+
+export interface RiskEvent {
+  id: string;
+  createdAt: string;
+  transactionId: string;
+
+  // Scores
+  riskScore: number;          // 0–1000, higher = riskier
+  fraudProbability: number;   // 0–1
+  deviceScore: number;        // 0–100, higher = more trusted
+  velocityScore: number;      // 0–100, higher = more suspicious
+
+  // Signals
+  isNewDevice: boolean;
+  isVPNOrProxy: boolean;
+  isHighRiskCountry: boolean;
+  isUnusualHour: boolean;
+  isUnusualAmount: boolean;
+  velocityBreached: boolean;
+  deviceFingerprint: string;
+  ipCountry: string;
+  cardCountry: string;
+  countryMismatch: boolean;
+
+  // Decision
+  decision: RiskDecision;
+  rulesTriggered: string[];
+  reviewStatus?: ReviewStatus;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  reviewNote?: string;
+
+  // Outcome
+  isFraudConfirmed?: boolean;
+  fraudType?: FraudType;
+  amount: number;
+  merchantName: string;
+}
+
+export interface FraudCase {
+  id: string;
+  createdAt: string;
+  transactionId: string;
+  fraudType: FraudType;
+  amount: number;
+  currency: string;
+  merchantName: string;
+  status: "open" | "investigating" | "confirmed" | "dismissed";
+  lossAmount: number;         // actual loss after recovery
+  recoveredAmount: number;
+  notes?: string;
+}
+
+export interface RiskRule {
+  id: string;
+  name: string;
+  description: string;
+  action: RuleAction;
+  isActive: boolean;
+  triggeredCount: number;
+  falsePositiveRate: number;  // 0–1
+  category: "velocity" | "device" | "geo" | "amount" | "behavioral";
+}
+
+export interface RiskMetrics {
+  totalEventsReviewed: number;
+  approvalRate: number;
+  declineRate: number;
+  reviewRate: number;
+  fraudRate: number;
+  falsePositiveRate: number;
+  fraudLoss: number;          // in cents
+  recoveredAmount: number;    // in cents
+  avgRiskScore: number;
+}
