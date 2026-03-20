@@ -65,7 +65,7 @@ const DOMAINS = [
     label:   "Compliance",
     desc:    "KYC/AML, transaction monitoring, reserves, prefunding, treasury ops.",
     href:    "/compliance",
-    live:    false,
+    live: true,
     accent:  "bg-purple-500",
   },
 ];

@@ -60,7 +60,7 @@ const NAV = [
     label: "Compliance",
     href: "/compliance",
     icon: Scale,
-    live: false,
+    live: true,
     phase: 6,
   },
 ];

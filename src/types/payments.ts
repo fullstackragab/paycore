@@ -498,3 +498,88 @@ export interface ReconMetrics {
   duplicatesFound: number;
   timingDifferences: number;
 }
+
+// ─── Compliance & Treasury types ──────────────────────────────────────────────
+
+export type KYCStatus = "pending" | "approved" | "rejected" | "needs_review" | "expired";
+export type KYBStatus = "pending" | "approved" | "rejected" | "needs_review" | "suspended";
+export type AMLAlertStatus = "open" | "investigating" | "escalated" | "cleared" | "reported";
+export type AMLAlertType =
+  | "structuring"
+  | "rapid_movement"
+  | "high_risk_corridor"
+  | "round_amount_pattern"
+  | "dormant_account_activity"
+  | "unusual_velocity"
+  | "pep_transaction"
+  | "sanctions_proximity";
+
+export interface KYCRecord {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  customerId: string;
+  customerName: string;
+  customerType: "individual" | "business";
+  status: KYCStatus;
+  riskTier: "low" | "medium" | "high";
+  country: string;
+  documentsSubmitted: string[];
+  reviewedBy?: string;
+  reviewedAt?: string;
+  expiresAt: string;
+  notes?: string;
+}
+
+export interface AMLAlert {
+  id: string;
+  createdAt: string;
+  customerId: string;
+  customerName: string;
+  alertType: AMLAlertType;
+  status: AMLAlertStatus;
+  riskScore: number;        // 0–100
+  transactionCount: number;
+  totalAmount: number;
+  currency: string;
+  description: string;
+  assignedTo?: string;
+  resolvedAt?: string;
+  sarFiled: boolean;        // Suspicious Activity Report
+}
+
+export interface ReserveAccount {
+  id: string;
+  merchantId: string;
+  merchantName: string;
+  reserveType: "rolling" | "fixed" | "capped";
+  reserveRate: number;      // 0–1, e.g. 0.05 = 5%
+  currentBalance: number;   // in cents
+  requiredBalance: number;  // in cents
+  currency: string;
+  releaseSchedule: string;
+  nextReleaseDate: string;
+  nextReleaseAmount: number;
+}
+
+export interface TreasuryPosition {
+  currency: string;
+  nostroBalance: number;     // funds held at correspondent
+  prefundedAmount: number;   // pre-funded for outgoing
+  reservedAmount: number;    // held as reserve
+  availableAmount: number;   // free to use
+  pendingInbound: number;
+  pendingOutbound: number;
+  lastUpdated: string;
+}
+
+export interface ComplianceMetrics {
+  totalKYCRecords: number;
+  approvedKYC: number;
+  pendingKYC: number;
+  rejectedKYC: number;
+  openAMLAlerts: number;
+  sarsFiled: number;
+  highRiskCustomers: number;
+  totalReserveHeld: number;
+}
