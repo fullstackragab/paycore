@@ -57,7 +57,7 @@ const DOMAINS = [
     label:   "Reconciliation",
     desc:    "Settlement files, exception handling, ledger drift, unmatched transactions.",
     href:    "/reconciliation",
-    live:    false,
+    live: true,
     accent:  "bg-green-500",
   },
   {

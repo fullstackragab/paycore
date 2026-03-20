@@ -429,3 +429,72 @@ export interface RiskMetrics {
   recoveredAmount: number;    // in cents
   avgRiskScore: number;
 }
+
+// ─── Reconciliation types ─────────────────────────────────────────────────────
+
+export type ReconStatus =
+  | "matched"
+  | "unmatched"
+  | "mismatched_amount"
+  | "duplicate"
+  | "timing_difference"
+  | "missing_in_bank"
+  | "missing_in_ledger";
+
+export type ReconSource = "internal_ledger" | "processor_file" | "bank_statement";
+
+export interface ReconRecord {
+  id: string;
+  date: string;
+  transactionId: string;
+  merchantName: string;
+  ledgerAmount: number;       // what our system says
+  processorAmount: number;    // what processor settlement file says
+  bankAmount: number;         // what bank statement says
+  currency: string;
+  status: ReconStatus;
+  discrepancy: number;        // difference in cents
+  resolvedAt?: string;
+  resolvedBy?: string;
+  resolutionNote?: string;
+  processorRef: string;
+  bankRef: string;
+}
+
+export interface ReconBatch {
+  id: string;
+  date: string;
+  totalRecords: number;
+  matchedCount: number;
+  unmatchedCount: number;
+  mismatchedCount: number;
+  duplicateCount: number;
+  timingCount: number;
+  totalDiscrepancy: number;   // in cents
+  status: "running" | "complete" | "needs_review";
+  completedAt?: string;
+}
+
+export interface LedgerEntry {
+  id: string;
+  createdAt: string;
+  transactionId: string;
+  entryType: "debit" | "credit";
+  amount: number;
+  currency: string;
+  accountName: string;
+  description: string;
+  balance: number;            // running balance after this entry
+  isReconciled: boolean;
+  reconId?: string;
+}
+
+export interface ReconMetrics {
+  totalRecords: number;
+  matchRate: number;
+  totalDiscrepancy: number;
+  openBreaks: number;
+  avgResolutionHours: number;
+  duplicatesFound: number;
+  timingDifferences: number;
+}
