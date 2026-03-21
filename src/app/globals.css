@@ -380,3 +380,89 @@ span[class*="rounded-full"][class*="border"][class*="px-2"] {
 
 /* ── Section heading inside panels ───────────────────────────────────────── */
 h3.text-sm { font-size: 13px; font-weight: 600; color: #111827; margin: 0 0 14px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYOUT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Desktop — sidebar visible, main offset */
+.main-content {
+  margin-left: 220px;
+  min-height: 100vh;
+  padding: 36px 40px;
+  max-width: calc(100vw - 220px);
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.desktop-sidebar { display: flex !important; }
+.mobile-topbar   { display: none !important; }
+
+/* Tablet / mobile — hide sidebar, show top bar */
+@media (max-width: 768px) {
+  .desktop-sidebar { display: none !important; }
+  .mobile-topbar   { display: flex !important; }
+  .mobile-close-btn { display: block !important; }
+
+  .main-content {
+    margin-left: 0;
+    max-width: 100vw;
+    padding: 68px 16px 24px; /* top padding = topbar height + gap */
+  }
+
+  /* Stack metric cards on mobile */
+  .main-content [style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .main-content [style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .main-content [style*="grid-template-columns: 2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  .main-content [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stack flex rows on mobile */
+  .main-content [style*="display:flex; gap:16"] {
+    flex-direction: column !important;
+  }
+
+  /* Detail panels full width on mobile */
+  .main-content [style*="width:280"] {
+    width: 100% !important;
+  }
+  .main-content [style*="width: 280"] {
+    width: 100% !important;
+  }
+
+  /* PageShell header stack on mobile */
+  .main-content [style*="justify-content: space-between"][style*="margin-bottom: 24"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Tabs scroll horizontally on mobile */
+  .main-content [style*="border-bottom: 1px solid rgb(229, 231, 235)"][style*="margin-bottom: 24"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tables scroll on mobile */
+  table { font-size: 11px; }
+  th, td { padding: 8px 8px; }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 64px 12px 20px;
+  }
+  .main-content [style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .main-content [style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}

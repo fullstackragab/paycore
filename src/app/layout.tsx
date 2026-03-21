@@ -16,14 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Sidebar />
-        {/* 220px = sidebar width. Responsive: on small screens sidebar collapses but we keep simple for now */}
-        <main style={{
-          marginLeft: 220,
-          minHeight: "100vh",
-          padding: "36px 40px",
-          maxWidth: "calc(100vw - 220px)",
-          overflowX: "hidden",
-        }}>
+        <main className="main-content">
           {children}
         </main>
       </body>
