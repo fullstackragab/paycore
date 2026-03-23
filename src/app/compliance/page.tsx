@@ -455,7 +455,7 @@ function KYCTab({ records }: { records: KYCRecord[] }) {
               {f === "all"
                 ? "All"
                 : f === "high"
-                  ? "⚠ High risk"
+                  ? "! High risk"
                   : (KYC_STATUS_META[f]?.label ?? f)}
             </button>
           ))}

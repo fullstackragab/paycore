@@ -51,16 +51,16 @@ export async function POST(req: NextRequest) {
       ? "Card read error — please try again"
       : !expiryValid
       ? "Card expired — please use a valid card"
-      : `Card read\n●●●● ●●●● ●●●● ${pan.replace(/\s/g,"").slice(-4)}\nPlease enter PIN`,
+      : `Card read\n**** **** **** ${pan.replace(/\s/g,"").slice(-4)}\nPlease enter PIN`,
     system: {
       title: "ATM card reader",
       fields: [
         { label: "ATM ID", value: atmId || "ATM-0042" },
         { label: "Location", value: atmLocation || "Unknown" },
         { label: "Read method", value: "EMV Chip" },
-        { label: "PAN (masked)", value: `●●●● ●●●● ●●●● ${pan.replace(/\s/g,"").slice(-4)}` },
-        { label: "Luhn check", value: panValid ? "✓ Pass" : "✗ Fail" },
-        { label: "Expiry check", value: expiryValid ? "✓ Valid" : "✗ Expired" },
+        { label: "PAN (masked)", value: `**** **** **** ${pan.replace(/\s/g,"").slice(-4)}` },
+        { label: "Luhn check", value: panValid ? "Pass" : "Fail" },
+        { label: "Expiry check", value: expiryValid ? "Valid" : "Expired" },
         { label: "Network", value: network },
         { label: "Processing code", value: "011000 — Cash withdrawal" },
       ],
@@ -90,11 +90,11 @@ export async function POST(req: NextRequest) {
     system: {
       title: "PIN verification — encrypted",
       fields: [
-        { label: "PIN entry", value: "●●●●" },
-        { label: "PIN format", value: pinValid ? "✓ 4 digits" : "✗ Invalid" },
+        { label: "PIN entry", value: "****" },
+        { label: "PIN format", value: pinValid ? "4 digits" : "Invalid" },
         { label: "Encryption", value: "PIN Block — ISO 9564 Format 0" },
         { label: "Key type", value: "Triple DES (3DES) under HSM" },
-        { label: "Verification", value: pinCorrect ? "✓ Online PIN — sent to issuer for verification" : "✗ PIN mismatch — issuer declined" },
+        { label: "Verification", value: pinCorrect ? "Online PIN — sent to issuer" : "PIN mismatch — issuer declined" },
         { label: "Attempt count", value: "1 of 3 — card blocked after 3 failures" },
         { label: "Result", value: pinCorrect ? "VERIFIED" : "FAILED" },
       ],
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
     label: "Cash dispensed",
     status: "success",
     duration: 500,
-    customer: `✓ Please take your cash\n$${(amountCents/100).toFixed(2)} dispensed\nATM fee: $${(atmFee/100).toFixed(2)}\nAuth code: ${aCode}`,
+    customer: `Cash dispensed\n$${(amountCents/100).toFixed(2)} dispensed\nATM fee: $${(atmFee/100).toFixed(2)}\nAuth code: ${aCode}`,
     system: {
       title: "Cash dispensed + ledger entries",
       fields: [

@@ -470,7 +470,7 @@ function PaymentsTab({ payments }: { payments: CrossBorderPayment[] }) {
                   : {}
               }
             >
-              {f === "all" ? "All" : f === "holds" ? "⚠ Sanctions holds" : f}
+              {f === "all" ? "All" : f === "holds" ? "! Sanctions holds" : f}
             </button>
           ))}
         </div>

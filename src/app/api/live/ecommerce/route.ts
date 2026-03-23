@@ -52,15 +52,15 @@ export async function POST(req: NextRequest) {
     status: inputValid ? "success" : "failed",
     duration: 400,
     customer: inputValid
-      ? `Card details validated\n${cardholderName}\n●●●● ●●●● ●●●● ${pan.replace(/\s/g,"").slice(-4)}`
+      ? `Card details validated\n${cardholderName}\n**** **** **** ${pan.replace(/\s/g,"").slice(-4)}`
       : !panValid ? "Invalid card number" : !expiryValid ? "Card has expired" : "Invalid CVV",
     system: {
       title: "Client-side validation",
       fields: [
-        { label: "PAN", value: `●●●● ●●●● ●●●● ${pan.replace(/\s/g,"").slice(-4)}` },
-        { label: "Luhn check", value: panValid ? "✓ Pass" : "✗ Fail" },
-        { label: "Expiry check", value: expiryValid ? "✓ Valid" : "✗ Expired" },
-        { label: "CVV format", value: cvvValid ? "✓ Valid length" : "✗ Invalid" },
+        { label: "PAN", value: `**** **** **** ${pan.replace(/\s/g,"").slice(-4)}` },
+        { label: "Luhn check", value: panValid ? "Pass" : "Fail" },
+        { label: "Expiry check", value: expiryValid ? "Valid" : "Expired" },
+        { label: "CVV format", value: cvvValid ? "Valid" : "Invalid" },
         { label: "Cardholder name", value: cardholderName },
         { label: "Billing ZIP", value: billingZip },
         { label: "Network detected", value: network },
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
     system: {
       title: "Network tokenization",
       fields: [
-        { label: "PAN", value: `${pan.replace(/\s/g,"").slice(0,6)}●●●●●●${pan.replace(/\s/g,"").slice(-4)}` },
+        { label: "PAN", value: `${pan.replace(/\s/g,"").slice(0,6)}******${pan.replace(/\s/g,"").slice(-4)}` },
         { label: "Token (PAN substitute)", value: token },
         { label: "Token type", value: "Network token (Visa Token Service / MDES)" },
         { label: "Token scope", value: "Merchant-bound — only usable at this merchant" },
@@ -111,8 +111,8 @@ export async function POST(req: NextRequest) {
     customer: !requires3DS
       ? "Frictionless authentication — no action needed"
       : threeDSPassed
-      ? "✓ Identity verified via banking app"
-      : "✗ Authentication failed",
+      ? "Identity verified via banking app"
+      : "Authentication failed",
     system: {
       title: `3DS 2.x — ${requires3DS ? "Challenge flow" : "Frictionless flow"}`,
       fields: [
@@ -122,8 +122,8 @@ export async function POST(req: NextRequest) {
         { label: "DS (directory server)", value: network === "Visa" ? "Visa Directory Server" : "Mastercard DS" },
         { label: "Authentication value", value: requires3DS ? (threeDSPassed ? `CAVV: ${uid()}` : "Not issued — failed") : `CAVV: ${uid()} (frictionless)` },
         { label: "ECI", value: requires3DS ? (threeDSPassed ? "05 — fully authenticated" : "07 — attempt") : "06 — frictionless" },
-        { label: "Liability shift", value: requires3DS && threeDSPassed ? "✓ Shifted to issuer" : "Remains with merchant" },
-        { label: "Result", value: threeDSPassed ? "Y — Authentication successful" : "N — Authentication failed" },
+        { label: "Liability shift", value: requires3DS && threeDSPassed ? "Shifted to issuer" : "Remains with merchant" },
+        { label: "Result", value: threeDSPassed ? "Authenticated" : "Failed" },
       ],
       note: requires3DS && threeDSPassed
         ? "Liability shifted to issuer. If this transaction is later disputed as fraud, the issuer bears the loss."
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
     label: "Capture",
     status: "success",
     duration: 400,
-    customer: `✓ Order confirmed\nPayment received by ${merchantName}\nOrder will be processed`,
+    customer: `Order confirmed\nPayment received by ${merchantName}\nOrder will be processed`,
     system: {
       title: "Capture request + order confirmation",
       fields: [

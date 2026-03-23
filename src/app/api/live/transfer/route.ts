@@ -91,8 +91,8 @@ export async function POST(req: NextRequest) {
       system: {
         title: "Sanctions screening — BLOCKED",
         fields: [
-          { label: "OFAC SDN check", value: "⚠ Possible match" },
-          { label: "EU list check", value: "⚠ Possible match" },
+          { label: "OFAC SDN check", value: "Possible match — review" },
+          { label: "EU list check", value: "Possible match — review" },
           { label: "UN list check", value: "Screening..." },
           { label: "Receiver name", value: receiverName },
           { label: "Action", value: "HOLD — escalated to compliance team" },
@@ -113,13 +113,13 @@ export async function POST(req: NextRequest) {
     system: {
       title: `Sanctions screening — ${isHighRisk ? "HIGH RISK CORRIDOR" : "CLEAR"}`,
       fields: [
-        { label: "OFAC SDN check", value: "✓ No match" },
-        { label: "EU consolidated list", value: "✓ No match" },
-        { label: "UN Security Council", value: "✓ No match" },
-        { label: "HM Treasury list", value: "✓ No match" },
-        { label: "PEP screening", value: "✓ Not a PEP" },
-        { label: "Receiver country", value: `${receiverCountry} — ${isHighRisk ? "⚠ Enhanced due diligence required" : "Standard risk"}` },
-        { label: "AML check", value: "✓ No suspicious patterns" },
+        { label: "OFAC SDN check", value: "Clear" },
+        { label: "EU consolidated list", value: "Clear" },
+        { label: "UN Security Council", value: "Clear" },
+        { label: "HM Treasury list", value: "Clear" },
+        { label: "PEP screening", value: "Clear" },
+        { label: "Receiver country", value: `${receiverCountry} — ${isHighRisk ? "Enhanced due diligence required" : "Standard risk"}` },
+        { label: "AML check", value: "No suspicious patterns" },
         { label: "Decision", value: isHighRisk ? "PROCEED WITH EDD" : "CLEAR — proceed" },
       ],
       note: isHighRisk
@@ -227,7 +227,7 @@ export async function POST(req: NextRequest) {
     label: "Credited",
     status: "success",
     duration: 500,
-    customer: `✓ Transfer complete\n${receiverName} will receive\n${receiveCurrency} ${(receiveAmountCents/100).toFixed(2)}`,
+    customer: `Transfer complete\n${receiverName} will receive\n${receiveCurrency} ${(receiveAmountCents/100).toFixed(2)}`,
     system: {
       title: "Beneficiary account credited",
       fields: [

@@ -549,7 +549,7 @@ function LiveFeedTab({ events }: { events: RiskEvent[] }) {
                       active ? "text-red-600 font-semibold" : "text-slate-300"
                     }
                   >
-                    {active ? "● Triggered" : "○ Clear"}
+                    {active ? "Triggered" : "Clear"}
                   </span>
                 </div>
               ))}

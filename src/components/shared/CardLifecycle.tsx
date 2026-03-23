@@ -383,7 +383,7 @@ export default function CardLifecycle() {
               <span className={clsx("rounded-full border px-2.5 py-1 text-xs font-medium", PARTY_COLORS[selected.party])}>
                 {PARTY_LABELS[selected.party]}
               </span>
-              <span className="text-xs text-slate-400">⏱ {selected.timing}</span>
+              <span className="text-xs text-slate-400"> {selected.timing}</span>
             </div>
           </div>
 
@@ -392,9 +392,9 @@ export default function CardLifecycle() {
           {/* Money / message / ledger indicators */}
           <div className="flex gap-3 mb-5">
             {[
-              { key: "moneyMoves",   label: "Money moves",   icon: "💵" },
-              { key: "messageMoves", label: "Message moves",  icon: "📨" },
-              { key: "ledgerChanges",label: "Ledger changes", icon: "📒" },
+              { key: "moneyMoves",   label: "Money moves",   icon: "$" },
+              { key: "messageMoves", label: "Message moves",  icon: "MSG" },
+              { key: "ledgerChanges",label: "Ledger changes", icon: "LED" },
             ].map(({ key, label, icon }) => {
               const active = selected[key as keyof Stage] as boolean;
               return (
@@ -410,7 +410,7 @@ export default function CardLifecycle() {
                   <span>{icon}</span>
                   <span>{label}</span>
                   <span className={active ? "text-green-600" : "text-slate-200"}>
-                    {active ? "✓" : "✗"}
+                    {active ? "yes" : "no"}
                   </span>
                 </div>
               );

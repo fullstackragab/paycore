@@ -238,8 +238,8 @@ function OverviewTab({
               <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
               <Tooltip />
               <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                {statusData.map((d) => (
-                  <Cell key={d.status} fill="#374151" />
+                {statusData.map((d, i) => (
+                  <Cell key={i} fill="#374151" />
                 ))}
               </Bar>
             </BarChart>
@@ -284,19 +284,19 @@ function OverviewTab({
           {[
             {
               label: "Internal ledger",
-              icon: "📒",
+              icon: "[L]",
               desc: "Your system's record of every transaction. Source of truth for what you believe happened.",
               color: "border-gray-200 bg-gray-50",
             },
             {
               label: "Processor file",
-              icon: "📄",
+              icon: "[P]",
               desc: "The settlement file from your processor (Stripe, Adyen, etc). Contains their view of captured and settled transactions.",
               color: "border-gray-200 bg-gray-50",
             },
             {
               label: "Bank statement",
-              icon: "🏦",
+              icon: "[B]",
               desc: "The actual bank account statement. Shows real fund movements. The ultimate source of financial truth.",
               color: "border-green-200 bg-green-50",
             },
@@ -437,10 +437,10 @@ function BreakAnalysisTab({ records }: { records: ReconRecord[] }) {
                   <td className="px-4 py-2.5">
                     {r.resolvedAt ? (
                       <span className="text-green-600 font-medium">
-                        ✓ Resolved
+                        OK Resolved
                       </span>
                     ) : (
-                      <span className="text-red-500 font-medium">⚠ Open</span>
+                      <span className="text-red-500 font-medium">! Open</span>
                     )}
                   </td>
                 </tr>
@@ -478,17 +478,17 @@ function BreakAnalysisTab({ records }: { records: ReconRecord[] }) {
                 {
                   source: "Internal ledger",
                   amount: selected.ledgerAmount,
-                  icon: "📒",
+                  icon: "[L]",
                 },
                 {
                   source: "Processor file",
                   amount: selected.processorAmount,
-                  icon: "📄",
+                  icon: "[P]",
                 },
                 {
                   source: "Bank statement",
                   amount: selected.bankAmount,
-                  icon: "🏦",
+                  icon: "[B]",
                 },
               ].map(({ source, amount, icon }) => {
                 const allAmounts = [
@@ -666,11 +666,11 @@ function LedgerTab({ entries }: { entries: LedgerEntry[] }) {
                 <td className="px-4 py-2.5">
                   {e.isReconciled ? (
                     <span className="text-green-600 text-xs font-medium">
-                      ✓ Reconciled
+                      OK Reconciled
                     </span>
                   ) : (
                     <span className="text-amber-600 text-xs font-medium">
-                      ⚠ Pending
+                      ! Pending
                     </span>
                   )}
                 </td>

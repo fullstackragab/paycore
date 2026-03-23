@@ -106,8 +106,8 @@ function OverviewTab({ transfers }: { transfers: BankTransfer[] }) {
                   <td className="py-1.5 text-gray-600">{r.speed}</td>
                   <td className={clsx("py-1.5 font-medium", r.reversible==="Irrevocable"||r.reversible==="No" ? "text-red-600":"text-yellow-600")}>{r.reversible}</td>
                   <td className={clsx("py-1.5", r.risk==="High"?"text-red-600":r.risk==="Medium"?"text-yellow-600":"text-green-700")}>{r.risk}</td>
-                  <td className="py-1.5 text-gray-400">{r.pull?"✓":"—"}</td>
-                  <td className="py-1.5 text-gray-400">{r.rtp?"✓":"—"}</td>
+                  <td className="py-1.5 text-gray-400">{r.pull?"yes":"—"}</td>
+                  <td className="py-1.5 text-gray-400">{r.rtp?"yes":"—"}</td>
                 </tr>
               ))}
             </tbody>

@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
         { label: "Expiry", value: expiry },
         { label: "Entry mode", value: isContactless ? "071 — Contactless NFC" : "051 — Chip" },
         { label: "Network detected", value: network },
-        { label: "Luhn check", value: panValid ? "✓ Pass" : "✗ Fail" },
+        { label: "Luhn check", value: panValid ? "Pass" : "Fail" },
         { label: "CVV present", value: cvv ? "Yes" : "No" },
       ],
       note: panValid
@@ -180,9 +180,9 @@ export async function POST(req: NextRequest) {
         { label: "Risk score", value: `${score} / 1000` },
         { label: "Risk level", value: riskLevel.toUpperCase() },
         { label: "Signals triggered", value: signals.length > 0 ? signals.join(", ") : "None" },
-        { label: "Amount check", value: amountCents > 50000 ? "⚠ High amount" : "✓ Normal" },
-        { label: "Hour check", value: (hour < 6 || hour > 23) ? "⚠ Unusual hour" : "✓ Normal" },
-        { label: "MCC risk", value: ["7995","6211","5813"].includes(merchantMCC) ? "⚠ High-risk MCC" : "✓ Normal MCC" },
+        { label: "Amount check", value: amountCents > 50000 ? "High amount" : "Normal" },
+        { label: "Hour check", value: (hour < 6 || hour > 23) ? "Unusual hour" : "Normal" },
+        { label: "MCC risk", value: ["7995","6211","5813"].includes(merchantMCC) ? "High-risk MCC" : "Normal" },
         { label: "Decision", value: score > 700 ? "DECLINE" : score > 500 ? "CHALLENGE" : "APPROVE" },
       ],
       note: score > 700
@@ -231,7 +231,7 @@ export async function POST(req: NextRequest) {
       label: "Receipt",
       status: "success",
       duration: 300,
-      customer: `✓ Approved — $${(amountCents/100).toFixed(2)}\nAuth code: ${aCode}\n${merchantName}`,
+      customer: `Approved — $${(amountCents/100).toFixed(2)}\nAuth code: ${aCode}\n${merchantName}`,
       system: {
         title: "Ledger entries + receipt",
         fields: [

@@ -35,7 +35,7 @@ export default function MetricCard({ label, value, sub, trend, trendLabel, accen
       {sub && <p style={{ fontSize: 11, color: "#9ca3af", margin: "2px 0 0" }}>{sub}</p>}
       {trend && trendLabel && (
         <p style={{ fontSize: 11, color: trendColor, margin: "6px 0 0", fontWeight: 500 }}>
-          {trend === "up" ? "↑" : trend === "down" ? "↓" : "→"} {trendLabel}
+          {trend === "up" ? "up" : trend === "down" ? "dn" : "—"} {trendLabel}
         </p>
       )}
     </div>
